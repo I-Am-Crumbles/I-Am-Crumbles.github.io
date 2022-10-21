@@ -20,6 +20,9 @@ linkedin_username: "matthew-crum"
 #########################################################################################
 theme: "minima"
 
+minima:
+  skin: dark
+  
 rss: rss
 
 kramdown:
