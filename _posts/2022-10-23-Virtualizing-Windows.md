@@ -31,7 +31,7 @@ Once you download and install the creation tool you will be asked to pick some o
 
 The first screen you are greeted with will give you a choice to either install windows 10 on your current PC or "Create installation media(USB flash drive, DVD, or ISO file) for another PC". We want to download Windows as an ISO file so select "Create Installation media"
 
-![Creation Tool Main Menu](https://github.com/I-Am-Crumbles/I-Am-Crumbles.github.io/blob/main/docs/assets/images/winvm1022/VM02.png)
+<img src= https://github.com/I-Am-Crumbles/I-Am-Crumbles.github.io/blob/main/docs/assets/images/winvm1022/VM02.png>
 
 After clicking next you will be greeted with the language, Operating system edition, and Architecture options, you will also have the option to "Use the recommended options for this PC".  
 
