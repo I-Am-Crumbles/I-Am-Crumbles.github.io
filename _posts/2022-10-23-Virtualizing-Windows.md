@@ -10,7 +10,7 @@ Link to virtual box download -  https://www.oracle.com/virtualization/technologi
 
 Once you have downloaded and installed the file relevant to your Operating System upon opening it you will be greeted by a screen that looks similar to this one.
 
-![Virtualbox Main Menu](I-Am-Crumbles.github.io/docs/assets/images/winvm1022/Vm01.png)
+![Virtualbox Main Menu](docs/assets/images/winvm1022/Vm01.png)
 
 We will be coming back to this in just a moment but for now the next thing you will need to do is download a Windows 10 ISO file. If you're like me and you're wondering what the ISO is .iso stands for geeksforgeeks has this to say. 
 
