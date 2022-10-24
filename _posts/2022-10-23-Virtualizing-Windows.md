@@ -21,7 +21,7 @@ We will be coming back to this in just a moment but for now the next thing you w
 
 ---
 
-<u>**Windows10 and Microsoft's Creation Tool**</u>
+<ins>**Windows10 and Microsoft's Creation Tool**</ins>
 
 We need a Windows 10 ISO file and unfortunately Microsoft won't let you just download the ISO file directly. You have to instead download their creation tool found here: 
 
@@ -45,7 +45,7 @@ On the final screen you will select the file location you want to save the ISO f
 
 ---
 
-<u>**Creating Your Virtual Machine**</u>
+<ins>**Creating Your Virtual Machine**</ins>
 
 Most of the work here will be because while pretty self-explanatory Microsoft's Windows 10 installation process is just kind of annoying. But there are a few options related to Virtualbox so we will go over that first. 
 
@@ -59,7 +59,7 @@ You can name the machine whatever you want and Virtualbox will do it's best to g
 
 ---
 
-<u>**Memory and Disc Space Allocation**</u>
+<ins>**Memory and Disc Space Allocation**</ins>
 
 After clicking Next at the bottom you will be greeted by the memory allocation screen. 
 
@@ -85,7 +85,7 @@ Click create and that's it! You should now see your Machine pop up on the left h
 
 ---
 
-<u>**Adding the Windows10 Disk Image to the New Virtual Machine**</u>
+<ins>**Adding the Windows10 Disk Image to the New Virtual Machine**</ins>
 
 The first time you launch your Machine from the manager you will be greeted with this screen that asks you to install the disc image.
 
@@ -109,7 +109,7 @@ That's it! Your reward is you will now get to go through Microsoft's Windows 10 
 
 ---
 
-<u>**Final Notes**</u>
+<ins>**Final Notes**</ins>
 
 They are going to want you to create or use an existing email to associate with the installation of Windows 10. It will also ask you to link said account to a secondary e-mail or phone number. Personally I view these small project machines as "throw aways" meaning they are meant to be deleted once my project is complete and the use for them is finished. So I generate new throw away emails for this process rather than associate my Windows 10 account from my hardware or personal phone number with it. That choice is yours though. 
 
@@ -119,7 +119,7 @@ I will be referencing this guide in future projects that require the installatio
 
 ---
 
-<u>**References**</u>
+<ins>**References**</ins>
 
 \* https://www.geeksforgeeks.org/iso-full-form/
 
