@@ -7,7 +7,7 @@
 
 There are many Hypervisors but for the sake of this walkthrough we will be using Oracle's Virtualbox as it's free. 
 
-Link to virtual box download -  https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html 
+[Virtualbox Download Link](https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html)
 
 Once you have downloaded and installed the file relevant to your Operating System upon opening it you will be greeted by a screen that looks similar to this one.
 
@@ -23,9 +23,8 @@ We will be coming back to this in just a moment but for now the next thing you w
 
 <ins>**Windows10 and Microsoft's Creation Tool**</ins>
 
-We need a Windows 10 ISO file and unfortunately Microsoft won't let you just download the ISO file directly. You have to instead download their creation tool found here: 
-
-https://www.microsoft.com/en-us/software-download/windows10 
+We need a Windows 10 ISO file and unfortunately Microsoft won't let you just download the ISO file directly. You have to instead download their creation tool found here 
+[Microsoft Creation Tool](https://www.microsoft.com/en-us/software-download/windows10) 
 
 Once you download and install the creation tool you will be asked to pick some options upon running. These options are pretty basic but we will go through them below. 
 
@@ -121,5 +120,5 @@ I will be referencing this guide in future projects that require the installatio
 
 <ins>**References**</ins>
 
-\* https://www.geeksforgeeks.org/iso-full-form/
+\* [geeksforgeeks](https://www.geeksforgeeks.org/iso-full-form/)
 
