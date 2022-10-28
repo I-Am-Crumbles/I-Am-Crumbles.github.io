@@ -18,7 +18,8 @@ linkedin_username: "matthew-crum"
 #########################################################################################
 ######### Nothing below needs to be changed (unless you know what you're doing) #########
 #########################################################################################
-theme: "minima" 
+remote_theme: "dracula/gh-pages"
+ 
 
 rss: rss
 
