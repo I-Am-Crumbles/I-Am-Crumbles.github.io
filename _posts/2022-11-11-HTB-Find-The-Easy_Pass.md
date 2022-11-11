@@ -32,7 +32,7 @@ Getting wine to install and work properly was surprisingly tricky. The first ste
 
 ![Install Wine](/docs/assets/images/HTB/easypass/easypass04.png)
 
-After installing wine I tried to use a help menu to view usage syntax but recieved an error message. There was a lot to unpack in the message but I believe the two key takeaways are that wine runs on 32bit architecture and since my kali machine is a 64bit system *multiarch* needs to be enabled. The error message even displayed the command to do so `dpkg -add-architecture i386 && apt-get update && apt-get install win32:i386`. The second takeaway being that wine seems to expect a filename rather than a switch as the second part of the argument. 
+After installing wine I tried to use the help menu to view usage syntax but recieved an error message. There was a lot to unpack in the message but I believe the two key takeaways are that wine runs on 32bit architecture and since my kali machine is a 64bit system *multiarch* needs to be enabled. The error message even displayed the command to do so `dpkg -add-architecture i386 && apt-get update && apt-get install win32:i386`. The second takeaway being that wine seems to expect a filename rather than a switch as the second part of the argument. 
 
 ![no help](/docs/assets/images/HTB/easypass/easypass05.png)
 
@@ -69,7 +69,7 @@ Taken from [Wikipedia]()
 
 >OllyDbg is an x86 debugger that emphasizes binary code analysis, which is useful when source code is not available. It traces registers, recognizes procedures, API calls, switches, tables, constants and strings, as well as locates routines from object files and libraries.
 
-The best part about *OllyDbg* from my experience was it was really simple to install and run. Other tools I tried required outdated versions of other tools and services to run. Olly was ready to go upon instalation with a simple command
+The best part about *OllyDbg* from my experience was it was really simple to install and run. Other tools I tried required outdated versions of other tools and services to run. Olly was ready to go upon installation with one simple command
 `sudo apt install ollydbg`
 
 ![Install OllyDbg](/docs/assets/images/HTB/easypass/easypass11.png)
@@ -88,11 +88,11 @@ After opening the binary in olly I was greeted with te following window labeled 
 
 ![main thread module](/docs/assets/images/HTB/easypass/easypass15.png)
 
-All I can really say about it is the binary expected as password had an error message that displayed saying "Wrong Password". So the first step was to search the binary for all referenced text strings. Right clicking the *main thread* window then selecting "search for > all referenced text strings" does just that. Another extremely tiny window labeled "Text strings referenced in EasyPass:Code" pops up. Fortunately the size was adjustable by dragging from the corner, it was still small however.
+All I can really say about it is the binary expected a password and had an error message that displayed saying "Wrong Password". So the first step was to search the binary for all referenced text strings. Right clicking the *main thread* window then selecting "search for > all referenced text strings" does just that. Another extremely tiny window labeled "Text strings referenced in EasyPass:Code" pops up. Fortunately the size was adjustable by dragging from the corner, it was still small however.
 
 ![Referenced Strings](/docs/assets/images/HTB/easypass/easypass16.png)
 
-Here the line of code containing the error message is found. It can also be seen that above the error message is a line of ASCII text that says "Good Job. Congratulations". It can be assumed from the context of the rest of the code that this is the message that will be displayed when the correct password is entered. Double clicking on that line will bring up that point of the code in the *main thread* window.
+Here the line of code containing the error message is found. It can also be seen that above the error message is a line of ASCII text that says "Good Job. Congratulations". It can be assumed from the context that this is the message that will be displayed when the correct password is entered. Double clicking on that line will bring up that point of the code in the *main thread* window.
 
 ![Congrats and Error messages](/docs/assets/images/HTB/easypass/easypass17.png)
 
@@ -104,7 +104,7 @@ In the screenshot above I have highlighted the line of code just above the congr
 >
 >jnz is commonly used to explicitly test for something not being equal to zero whereas jne is commonly found after a cmp instruction. 
 
-Meaning this is the placement in the code where the check to see if the user entered the correct password exists.
+Meaning this should be the placement in the code where the check to see if the user entered the correct password is located.
 
 Right Clicking the line of code, selecting breakpoint, and then clicking toggle will cause the binary, when run inside of olly, to run all the way up to that line of code and then stop. Alternatively selecting the line of code and pressing F2 also works. The line should receive a red highlight to indicate that the breakpoint has been created.
 
@@ -119,11 +119,11 @@ Clicing the play button located at the top of the Olly interface does just that.
 
 ![crumblescrumblescrumbles](/docs/assets/images/HTB/easypass/easypass22.png)
 
-After a minute I was able to scroll through the window in the bottom right corner and eventually find the text that was entired in the password field. This was A LOT of scrolling, even my own efforts were almost not enough as the line of text repeating "crumbles" wasn't as long as I hoped it would be. I was not able to find a better method than just endlessly scrolling through the text manually, but I'd be open to suggestions from someone with more experience using Olly.
+After a minute I was able to scroll through the window in the bottom right corner and eventually find the text that was entered in the password field. This was A LOT of scrolling, my efforts were almost not enough as the line of text repeating "crumbles" wasn't as long as I hoped it would be. I was not able to find a better method than just endlessly scrolling through the text manually, but I'd be open to suggestions from someone with more experience using Olly.
 
 ![found it](/docs/assets/images/HTB/easypass/easypass23.png)
 
-This is the part of the code where the jump assembly performs it's check and in this case it's checking against a plaintext password hardcoded into the binary which is displayed just a few lines of code down from the password I entered.
+This is the part of the code where the jump assembly performs it's check and in this case it's checking against a plaintext password hardcoded into the binary which is displayed just a few lines down from the password I entered.
 
 ![the password](/docs/assets/images/HTB/easypass/easypass24.png)
 
@@ -132,11 +132,11 @@ This is the part of the code where the jump assembly performs it's check and in 
 
 <ins>**Claiming The Flag**</ins>
 
-With the password at the ready I went back to the binary file in the terminal and again used *wine* to execute it. Entering the password I found I was greeted with the congratulations message that I found in the code earlier. 
+With the password at the ready I went back to the binary file in the terminal and again used *wine* to execute it. Entering the password I found I was greeted with the congratulations message that I found earlier. 
 
 ![Congrats](/docs/assets/images/HTB/easypass/easypass25.png)
 
-I thought there would be more to the binary file and maybe the actual flag for the challenge would display once I entered the correct password but it did not. The flag is actually the password hidden in the file but written in the format asked for by hackthebox on the challenges page.
+I thought there would be more to the binary file and maybe the actual flag for the challenge would display once I entered the correct password but it did not. The flag is actually just the password hidden in the file but written in the format asked for by hackthebox on the challenges page.
 
 ![pwned](/docs/assets/images/HTB/easypass/easypass26.png)
 
