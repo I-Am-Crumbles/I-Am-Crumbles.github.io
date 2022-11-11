@@ -1,10 +1,10 @@
 ## **Hack The Box - Find The (not so) Easy Pass**
 
-**Creator:** 
+**Creator:** [Thiseas](https://app.hackthebox.com/users/93)
 
-**Difficulty:**
+**Difficulty:** Easy
 
-**Link:** 
+**Link:** [Find The Easy Pass](https://app.hackthebox.com/challenges/5)
 
 ---
 
