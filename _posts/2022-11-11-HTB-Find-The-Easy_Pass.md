@@ -106,14 +106,46 @@ In the screenshot above I have highlighted the line of code just above the congr
 
 Meaning this is the placement in the code where the check to see if the user entered the correct password exists.
 
-Right Clicking the line of code, selecting breakpoint, and then clicking toggle will cause the binary, when run inside of olly, to run all the way up to that line of code and then stop. Alternatively selecting the line of code and pressing F2 also works. The line should recieve a ride highlight to indicate that the breakpoint has been created.
+Right Clicking the line of code, selecting breakpoint, and then clicking toggle will cause the binary, when run inside of olly, to run all the way up to that line of code and then stop. Alternatively selecting the line of code and pressing F2 also works. The line should recieve a red highlight to indicate that the breakpoint has been created.
 
 ![breakpoint](/docs/assets/images/HTB/easypass/easypass19.png)
 
 ![red highlight](/docs/assets/images/HTB/easypass/easypass20.png)
 
 
+Clicing the play button located at the top of the Olly interface does just that. The binary runs and I am again prompted to enter the password. This part gets a little more tricky, as if it wasn't already, in that something must be entered into the password field that will be extremely noticeable. For me I entered a nickname of mine repeating several times over then clicked check password. 
 
+![play button](/docs/assets/images/HTB/easypass/easypass21.png)
+
+![crumblescrumblescrumbles](/docs/assets/images/HTB/easypass/easypass22.png)
+
+After a minute I was able to scroll through the window in the bottom right corner and eventually find the text that was entired in the password field. This was A LOT of scrolling, even my own efforts were almost not enough as the line of text repeating "crumbles" wasn't as long as I hoped it would be. I was not able to find a better method than just endlessly scrolling through the text manually, but I'd be open to suggestions from someone with more experience using Olly.
+
+![found it](/docs/assets/images/HTB/easypass/easypass23.png)
+
+This is the part of the code where the jump assembly performs it's check and in this case it's checking against a plaintext password hardcoded into the binary which is displayed just a few lines of code down from the password I entered.
+
+![the password](/docs/assets/images/HTB/easypass/easypass24.png)
+
+---
+
+
+<ins>**Claiming The Flag**</ins>
+
+With the password at the ready I went back to the binary file in the terminal and again used *wine* to execute it. Entering the password I found I was greeted with the congratulations message that I found in the code earlier. 
+
+![Congrats](/docs/assets/images/HTB/easypass/easypass25.png)
+
+I thought there would be more to the binary file and maybe the actual flag for the challenge would display once I entered the correct password but it did not. The flag is actually the password hidden in the file but written in the format asked for by hackthebox on the challenges page.
+
+![pwned](/docs/assets/images/HTB/easypass/easypass26.png)
+
+---
+
+
+<ins>**Final Thoughts**</ins>
+
+Reverse Engineering is difficult. I followed several guides to complete this challenge and it was still hard. Looking at the solution it probably is an "easy" challenge in terms of Reverse Engineering as a whole, but as something that I went into as part of a "Beginners Track" I was surprised at the difficulty. As my first real dive into such a complex topic I would say over all I learned a lot from this challenge and I'm glad I stuck it through to the end.
  
 
 
