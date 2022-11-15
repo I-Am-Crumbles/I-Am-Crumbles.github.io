@@ -1,4 +1,4 @@
-## **OSSIM Installation \& Setup**
+## **OSSIM Installation and Setup**
 
 
 For this post I will be going through the installation of *AlienVault OSSIM* along with setting up a virtual network of machines connected to the *SIEM* for future project use 
