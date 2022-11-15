@@ -113,7 +113,19 @@ This was moderately intense on my resources but doable while still allowing plen
 
 ![Discovery Wizzard](/docs/assets/images/ossim/ossim25.png)
 
-Then I ran the wizzard and let it discover my assets on the network. 
+Then I ran the wizzard and let it discover my assets on the network. Which I was then able to put together in their own group.
+
+![Discovered Assets](/docs/assets/images/ossim/ossim27.png)
+
+![Custom Group](/docs/assets/images/ossim/ossim28.png)
+
+
+---
+
+<ins>**Final Thoughts**</ins>
+
+Not a whole lot. This was as simple as installing any other disk image onto Virtualbox. This post was really just about documenting my process and to have a quick reference for future projects if needed. 
+
 
 
 
