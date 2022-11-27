@@ -150,7 +150,7 @@ This function took me a while to disect and I don't really know *c++* but I'll d
 
 ![flag function](/docs/assets/images/HTB/diablos/diablos23.png)
 
-The function allocates a character arra size of 64 to the *local_50* variable, then reads the *flag.txt* file and saves the content to that *local_50* variable. It then uses an if statement to check 2 parameters and if they match it the *local_50* variable is printed, which should now contain the *flag.txt* file contents.
+The function allocates a character array size of 64 to the *local_50* variable, then reads the *flag.txt* file and saves the content to that *local_50* variable. It then uses an if statement to check 2 parameters and if they match it the *local_50* variable is printed, which should now contain the *flag.txt* file contents.
 
 The parameters that need to be matched are displayed in the decompile window as *param_1 == -0x21524111* and *param_2 == -0x3f212ff3*. However Highlighting this line in the decompile window also brings them up and highlights the section related to it in the *listing* window. Here it is displayed what the parameters really are which is *0xdeadbeef* and *0xc0ded00d* respectively 
 
@@ -175,13 +175,13 @@ but it didn't work for a number of reasons.
 
 ![Didn't Work](/docs/assets/images/HTB/diablos/diablos26.png)
 
-After spending some time on google trying to figure out a reason what exactly I was missing it turned out to be a lot. I was able to find a payload [here](https://www.bmwalsh.net/hack-the-box/beginner-track/you-know-0xdiablos) that did work.
+After spending some time on google trying to figure out what I was missing it turned out to be a lot. I was able to find a payload [here](https://www.bmwalsh.net/hack-the-box/beginner-track/you-know-0xdiablos) that did work.
 
 `python3 -c 'import sys; sys.stdout.buffer.write(b"A" * 188 + b"\xe2\x91\x04\x08" + b"DUMB\xef\xbe\xad\xde\x0d\xd0\xde\xc0")' | ./vuln `
 
 ![Did work](/docs/assets/images/HTB/diablos/diablos27.png)
 
-so to break it down `python3 -c` calls python3 and tells it to execute statements as a command. `import sys;` imports the *sys* library, and `sys.stdout.buffer.write` is used because in python3 all strings are encoded in unicode and the print funciton does not print binary data. So stdout's underlying binary buffer must be written to, it's representation has to be used which looks like *b"example_text"*. 
+To break it down `python3 -c` calls python3 and tells it to execute statements as a command. `import sys;` imports the *sys* library, and `sys.stdout.buffer.write` is used because in python3 all strings are encoded in unicode and the print funciton does not print binary data. So stdout's underlying binary buffer must be written to, it's representation has to be used which looks like *b"example_text"*. 
 
 `(b"A" * 188 + b"\xe2\x91\x04\x08" + b"DUMB\xef\xbe\xad\xde\x0d\xd0\xde\xc0")'`
 Tells python to write the binary representation of the string "A" 188 times, which is to cause the *segmentation fault* then write the hex value that represents the *flag()* functions location to call it and then finally feed it the 2 parameters found earlier.
