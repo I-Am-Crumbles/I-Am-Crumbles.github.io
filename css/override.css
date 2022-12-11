@@ -44,17 +44,13 @@ hr {
   opacity: 0.3;
 }
 
-/* Dark mode styles */
-.dark-mode {
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: black;
+    color: white;
+  }
   hr {
     border-color: white;
   }
-  
   .post_navi-label {
-    color: white;
-  }
-  
-  .post_navi-arrow {
-    color: white;
-  }
-}
+    color: white
