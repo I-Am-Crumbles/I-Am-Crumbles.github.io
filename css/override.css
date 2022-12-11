@@ -43,3 +43,18 @@ hr {
   font-size: 2.5em;
   opacity: 0.3;
 }
+
+/* Dark mode styles */
+.dark-mode {
+  hr {
+    border-color: white;
+  }
+  
+  .post_navi-label {
+    color: white;
+  }
+  
+  .post_navi-arrow {
+    color: white;
+  }
+}
