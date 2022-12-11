@@ -25,7 +25,7 @@ I start this machine by running the default nmap scan I usually run to enumerate
 
 ![nmap results cont](/docs/assets/images/HTB/netmon/netnom03.png)
 
-Looks like *ftp* traffic is open to default crednetials on port 21 wich may allow for a look at some of the stuff in the file system, this system is using *Microsoft ftpd*. 
+Looks like *ftp* traffic is open to default credentials on port 21 wich may allow for a look at some of the stuff in the file system, this system is using *Microsoft ftpd*. 
 
 Port 80 is open to *http* web traffic and is running *Indy httpd 18.1.37.13946* something called *Paessler PRTG bandwidth monitor* is also mentioned.
 
@@ -35,7 +35,7 @@ Both ports 139 and 445 are also open these are associated with an *smb* server a
 
 There is also a message that says *nmap* couldn't actually identify the operating system but there is plenty in the output to suggest that it's *windows*.
 
-I stared *nikto* and while it ran I used *searchsploit* to look for vulnerabilities on some of the information I had found in the *nmap* scan however I didn't really find a whole lot this way.
+I started *nikto* and while it ran I used *searchsploit* to look for vulnerabilities on some of the information I had found in the *nmap* scan however I didn't really find a whole lot this way.
 
 ![nikto results](/docs/assets/images/HTB/netmon/netnom04.png)
 
@@ -54,14 +54,14 @@ I would spend a good amount of time digging through everything Anonymous had acc
 
 ![user flag](/docs/assets/images/HTB/netmon/netnom07.png)
 
-there was more on this file server but on my first pass through this was all I found that lead me to anything related to the challenge.
+There was more on this file server but on my first pass through this was all I found that lead me to anything related to the challenge.
 
 ---
 
 
 <ins> **The Webpage** </ins>
 
-Proceeding with my *nmap* scan results I navigate to the webpage being hosted on port 80. I was greeted with a login page for *PRTG Network Monitor (NETMON)*. I tried several things on this page like sql injections, guessing default credentials and analyzing the requests and responses in *Burp*. Ultimately the most useful piece of info I was able to find was displayed right at the bottom of the page and that was the service version *PRTG Network Monitor 18.1.37.13946*.
+Proceeding with my *nmap* scan results I navigate to the webpage being hosted on port 80. I was greeted with a login page for *PRTG Network Monitor (NETMON)*. I tried several things on this page like sql injections, guessing default credentials, and analyzing the requests and responses in *Burp*. Ultimately the most useful piece of info I was able to find was displayed right at the bottom of the page and that was the service version *PRTG Network Monitor 18.1.37.13946*.
 
 ![Webpage](/docs/assets/images/HTB/netmon/netnom08.png)
 
