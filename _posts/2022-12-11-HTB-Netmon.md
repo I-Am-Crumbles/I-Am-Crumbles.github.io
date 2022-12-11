@@ -100,3 +100,54 @@ I can see that the password is listed right there in plaintext as *PrTg@dmin2018
 
 ![Login Successful](/docs/assets/images/HTB/netmon/netnom16.png)
 
+---
+
+
+<ins> **Exploitation** </ins>
+
+First I'll need to steal the cookie. Loading up *Burp Suite* I navigate over to the *proxy* tab and turn *intercept* on, I then launch burps *browser* and navigate to the webpage in it. I needed to forward each request in *Burp Suite* but eventually during the login process one of the pages displayed in *Burp Suite* contained the login request with the *cookie*.
+
+![Stealing Cookie](/docs/assets/images/HTB/netmon/netnom17.png)
+
+This will allow me to run the remote code execution exploit I found earlier.
+
+![vim exploit](/docs/assets/images/HTB/netmon/netnom11.png)
+
+Put together with the proper syntax it looks like this:
+`/usr/share/exploitdb/exploits/windows/webapps/46527.sh -u http://10.10.10.152 -c "_ga=GA1.4.341543394.1670719922; _gid=GA1.4.1492868040.1670719922; OCTOPUS1813713946=ezgyNzU1M0ZFLTQ4RDQtNDYxNi04RTMwLTdBODgyMDJEMzFDQX0%3D" `
+
+![Running the Exploit](/docs/assets/images/HTB/netmon/netnom18.png)
+
+The script even comes with a built in message to notify the user that it was successful it.
+
+![Success](/docs/assets/images/HTB/netmon/netnom19.png)
+
+There is a tool called [psexec](https://learn.microsoft.com/en-us/sysinternals/downloads/psexec) that functions as a telnet replacement that lets you execute processes on remote systems. The python script for *psexec* is installed on *kali* by default and has a pretty simple syntax.
+
+`psexec.py "pentest@10.10.10.152` 
+
+When prompted for a password I enter "P3nT3st!" as displayed by the script that generated the user. After *psexec* runs I'm greeted with a screen that looks similar to the *ftp* console from earlier. A quick whoami reveals that I'm the *system* user. 
+
+![Whoami](/docs/assets/images/HTB/netmon/netnom20.png)
+
+Navigating around the filesystem I see that I'm able to go wherever I want as this user. I went into the *Administrator* users directory and after looking around a little bit I found the flag in the *Desktop* directory.
+
+![Rootflag](/docs/assets/images/HTB/netmon/netnom21.png)
+
+With that *netmon* is done.
+
+![pwned](/docs/assets/images/HTB/netmon/netnom22.png)
+
+---
+
+
+<ins> **Final Thoughts** </ins>
+
+It was cool to utitilize a vulnerability on a machine that didn't rely on *Metasploit* for the first time in my dive into the Beginner Track. I'll have to remember in the future that if I find a password to make sure I've thought about all of the context that could be applied to it, like it being updated anually as in the example here. 
+
+
+
+
+
+
+
