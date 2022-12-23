@@ -1,8 +1,6 @@
-<p align="center">
-  
 ![Unlock](docs/assets/images/AutViam.jpg)
 
-</p>
+
 
 ## Who am I?
 
