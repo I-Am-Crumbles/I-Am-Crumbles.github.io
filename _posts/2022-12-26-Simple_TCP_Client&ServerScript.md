@@ -116,5 +116,5 @@ The *server* however will continue to run until the script is closed. Even then 
 
 <ins> **Final Thoughts** </ins>
 
-Not a whole lot on this one. I plan to focus my studies a little more on *Python* and utilizing it as a tool for *Penetration Testing*. These are simple scripts that will probably be built out more as I pursue personal projects related to them.
+Not a whole lot on this one. I plan to focus my studies a little more on *Python* and utilizing it as a tool for *Penetration Testing*. Here I learned a bit about how the *socket* and *threading* modules work but these are simple scripts that will probably be built out more as I pursue personal projects related to them.
 
