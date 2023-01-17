@@ -199,7 +199,7 @@ From here it was just navigating to the */root/* directory and using `cat` to re
 
 That's it for Nibbles for now.
 
-![pwned]()
+![pwned](/docs/assets/images/HTB/nibbles/nibblespwn.png)
 
 ---
 
