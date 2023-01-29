@@ -119,7 +119,7 @@ With Henry's password at hand I'm able to just *ssh* into the machine using the 
 
 The first thing I do when I get access to a new user on a linux machine is run `sudo -l` to see what they are allowed to do. In Henry's case they are able to run a script that will update the dependencies for *ruby* with root access without a password, so I ran it to see what all it did, which seems to be generate an error.
 
-`sudo /usr/bin/ruby /opt/update_dependencies.rb'
+`sudo /usr/bin/ruby /opt/update_dependencies.rb`
 
 ![sudo -l](/docs/assets/images/HTB/precious/precious26.png)
 
