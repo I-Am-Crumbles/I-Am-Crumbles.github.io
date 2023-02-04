@@ -27,7 +27,11 @@ rss: rss
 kramdown:
   syntax_highlighter_opts:
     disable: true
-    
+
+header_pages:
+  - archive.md
+  - resume.html
+
 plugins:
   - jekyll-feed
   - jekyll-sitemap
