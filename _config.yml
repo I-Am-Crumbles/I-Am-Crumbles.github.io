@@ -28,9 +28,6 @@ kramdown:
   syntax_highlighter_opts:
     disable: true
 
-header_pages:
-  - archive.md
-  - resume.html
 
 plugins:
   - jekyll-feed
@@ -40,6 +37,12 @@ plugins:
 titles_from_headings:
   strip_title: true
   collections: true
+
+header_pages:
+  - resume.html
+  - archive.md
+
+home_post_limit: 5
 
 defaults:
   - scope:
