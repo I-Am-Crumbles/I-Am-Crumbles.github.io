@@ -156,7 +156,7 @@ This final line uses the `find` command to search for files with the *.jpg* exte
 
 `find source_images -type f -name '*.jpg" -exec chown root:root {} \;`
 
-With `SETENV` specified in the `sudo -l` command I can set a custom `PATH` variable that references a `find` command created by me when the script trys to run `find` without an absolute path in it's last line.
+With `SETENV` specified in the `sudo -l` command I can set a custom `PATH` variable that references a `find` command created by me when the script tries to run `find` without an absolute path in it's last line.
 
 The following command creates a file called *find* in the */tmp* directory but instead of functioning like *find* it will instead generate me a shell with root privileges.
 
