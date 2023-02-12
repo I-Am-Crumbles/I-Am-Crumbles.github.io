@@ -39,7 +39,7 @@ titles_from_headings:
   collections: true
 
 header_pages:
-  - resume.html
+  - resume.md
   - archive.md
 
 home_post_limit: 5
