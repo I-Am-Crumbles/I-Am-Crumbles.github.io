@@ -1,5 +1,5 @@
 ---
 layout: page
-title: Project Archive
+title: Resume
 permalink: /https://i-am-crumbles.github.io/resume
 ---
