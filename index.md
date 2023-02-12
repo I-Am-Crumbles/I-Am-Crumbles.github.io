@@ -9,7 +9,3 @@ I am Crumbles. At least online anyway, in real life most people just call me Mat
 If you decide to take the time to check out some of my posts feel free to leave a comment. Whether I helped you learn something new or you think this is just the same rehashed content everyone else puts out I'd love to hear it. After all everyone has a blog, bud.
 
 
-{% for post in site.posts limit:home_post_limit %}
-  <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-  {{ post.excerpt }}
-{% endfor %}
