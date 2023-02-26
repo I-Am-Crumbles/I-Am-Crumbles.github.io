@@ -157,7 +157,7 @@ From there I just use `cat` to read the *root.txt* file to obtain the flag.
 
 ![root flag](/docs/assets/images/HTB/gettingstarted/gettingstarted28.png)
 
-No fance *PWND* info card with this one.
+No fancy *PWND* info card with this one.
 
 ---
 
