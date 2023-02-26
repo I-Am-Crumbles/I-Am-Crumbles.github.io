@@ -57,3 +57,18 @@ I spent some time navigating through these directories and seeing what informati
 
 ![CVE-2019-11231](/docs/assets/images/HTB/gettingstarted/gettingstarted13.png)
 
+Immediately what stood out to me was this line about password exposure:
+
+> However, what is overlooked is that the Apache HTTP Server by default no longer enables the AllowOverride directive, leading to data/users/admin.xml password exposure.
+
+Sure enough navigating over to the *data/users/admin.xml* directory leads to some exposed login credentials *admin:d033e22ae348aeb5660fc2140aec35850c4da997*. The password is hashed but I was able to easily put that into a file and use *john* to crack it.
+
+```
+echo "d033e22ae348aeb5660fc2140aec35850c4da997" > passhash.txt
+sudo john passhash.txt
+```
+![password hash](/docs/assets/images/HTB/gettingstarted/gettingstarted14.png)
+
+![john](/docs/assets/images/HTB/gettingstarted/gettingstarted15.png)
+
+The password is *admin*. Navigating back over to the */admin* directory I enter the credentials *admin:admin* and gain access to the CMS admin page.
