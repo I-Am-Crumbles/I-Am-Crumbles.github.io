@@ -28,6 +28,8 @@ Port 80/tcp open to http using Apache httpd 2.4.41
 
 Neither one yielded any results initially with *searchsploit*. Navigating over to the webpages showed me what looked like an outline for a blog or something running *GetSimple* Content Managment System. This page contains a few links to documentation for *GetSimple* and some support forums. There are also some headers containing some content in a language I can't read, a list of features, and finally a link to *gettinstarted*. 
 
+
+
 ![searchsploit](/docs/assets/images/HTB/gettingstarted/gettingstarted2.png)
 
 ![webpage](/docs/assets/images/HTB/gettingstarted/gettingstarted3.png)
@@ -104,6 +106,29 @@ After that I will set up a listener in a new terminal then navigate over to the 
 ![filepath](/docs/assets/images/HTB/gettingstarted/gettingstarted20.png)
 
 ![execute shell](/docs/assets/images/HTB/gettingstarted/gettingstarted21.png)
+
+Back at my listener I can see that I'm now logged in as the www-data user. My next step after that is to use python to upgrade the TTY so that it's easier to work with and then I will begin the enumeration phase all over to see what I can find as this low level user. 
+
+`python3 -c 'import pty; pty.spawn("/bin/bash")'`
+
+![listener whoami](/docs/assets/images/HTB/gettingstarted/gettingstarted22.png)
+
+![upgrade TTY](/docs/assets/images/HTB/gettingstarted/gettingstarted23.png)
+
+The user flag was very easy to find since the www-data user has the correct permissions to read the file.
+
+![user flag](/docs/assets/images/HTB/gettingstarted/gettingstarted24.png)
+
+---
+
+
+<ins> **Privilege Escalation** </ins>
+
+
+
+
+
+
 
 
 
