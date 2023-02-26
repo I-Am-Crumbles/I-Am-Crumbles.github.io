@@ -41,7 +41,7 @@ I wasn't able to find a whole lot on the web page as it is. The next step for me
 
 ![gobuster](/docs/assets/images/HTB/gettingstarted/gettingstarted7.png)
 
-I spent some time navigating through these directories and seeing what information I could find from them. The */admin* directory redirected to a login page with a nonspecific error message, and inside of the */data* directory I was able to find an *api key* and what was likely the specific version of *GetSimple*, being *GetSimple 3.3.15* 
+I spent some time navigating through these directories and seeing what information I could find from them. The */admin* directory redirected to a login page with a nonspecific error message, and inside of the */data* directory I was able to find an *api key* and what was likely the specific version of *GetSimple*, being *GetSimple 3.3.15*.
 
 ![admin login](/docs/assets/images/HTB/gettingstarted/gettingstarted10.png)
 
@@ -50,4 +50,10 @@ I spent some time navigating through these directories and seeing what informati
 ![api key](/docs/assets/images/HTB/gettingstarted/gettingstarted8.png)
 
 ![GetSimple Version](/docs/assets/images/HTB/gettingstarted/gettingstarted9.png)
+
+*Searchsploit* again failed to yield any results for this specific version. At this point I kind of hit a wall so I spent some time on google searching for the service versions I found already which is where I found [CVE-2019-11321](https://nvd.nist.gov/vuln/detail/CVE-2019-11231). 
+
+![searchsploit getsimple](/docs/assets/images/HTB/gettingstarted/gettingstarted12.png)
+
+![CVE-2019-11231](/docs/assets/images/HTB/gettingstarted/gettingstarted13.png)
 
