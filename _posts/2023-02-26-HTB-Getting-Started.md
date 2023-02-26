@@ -1,6 +1,6 @@
 ## **Hack The Box - Getting Started**
 
-**Creator:** 
+**Creator:** [mrb3n](https://app.hackthebox.com/users/2984)?
 
 **Difficulty:** Easy
 
@@ -124,11 +124,47 @@ The user flag was very easy to find since the www-data user has the correct perm
 
 <ins> **Privilege Escalation** </ins>
 
+Using `sudo -l` I'm able to see that the *www-data* user can execute the *php* command as root without the need for a password.
+
+![sudo -l](/docs/assets/images/HTB/gettingstarted/gettingstarted25.png)  
+
+Unfortunately while trying for privilege escalation my *TTY* was just giving me a world of trouble. So I started over and took a few extra steps to give myself a better one.  
+
+```
+python3 -c 'import pty; pty.spawn("/bin/bash")' 
+
+Ctrl-Z  # This will suspend the current process and return you to your local shell 
+
+stty raw -echo 
+
+Fg 
+```
+
+With that out of the way I now have a much more stable shell, sadly the exploit I am about to do in the next step is about undo all of that work.
+
+Searching for *php* on [GTFO Bins](https://gtfobins.github.io/gtfobins/php/#sudo) shows an exploit that will escalate privileged access on the machine
+
+```
+CMD="/bin/sh"
+sudo php -r "system('$CMD');"
+```
+
+![GTFO BINS](/docs/assets/images/HTB/gettingstarted/gettingstarted26.png)
+
+![Whoami Root](/docs/assets/images/HTB/gettingstarted/gettingstarted27.png)
+
+From there I just use `cat` to read the *root.txt* file to obtain the flag.
+
+![root flag](/docs/assets/images/HTB/gettingstarted/gettingstarted28.png)
+
+No fance *PWND* info card with this one.
+
+---
 
 
+<ins> **Final Thoughts** </ins>
 
-
-
+Not a whole lot on this one. I learned a little bit more about *named pipes* and taking a reverse shell I already used and modifying the payload slightly for a different system. All and all I'd say this is one of the easiest boxes I've ever done, which I believe it was intended to be since it's the *first* blackbox machine on the learning path.
 
 
 
