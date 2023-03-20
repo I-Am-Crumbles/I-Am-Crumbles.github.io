@@ -153,7 +153,7 @@ In short for my purposes this means that anyone who has access to this file can 
 
 ![curl](/docs/assets/images/HTB/squashed/squashed25.png)
 
-Now I can point the environment variable *XAUTHORITY* to the cookie and can in theory now interact with the display since I've hijacked ross' session. I should be able to see what is happening on the display by taking a screenshot and then downloading the file to open it on my host machine. The first step is to use the `w` command to see which display is used by ross. The display will be listed in the *FROM* column of the command output, which in this case the name is *:0*.
+Now I can point the environment variable *XAUTHORITY* to the cookie and can in theory interact with the display since I've hijacked ross' session. I should be able to see what is happening on the display by taking a screenshot and then downloading the file to open it on my host machine. The first step is to use the `w` command to see which display is used by ross. The display will be listed in the *FROM* column of the command output, which in this case the name is *:0*.
 
 `export XAUTHORITY=/tmp/.Xauthority`
 
@@ -186,6 +186,26 @@ Back on my host machine I used `wget` to download the file. I can then use the `
 ![convert](/docs/assets/images/HTB/squashed/squashed31.png)
 
 ![open image](/docs/assets/images/HTB/squashed/squashed32.png)
+
+The image file a screenshot of the *Passwords* file I found earlier opened in *KeePassXC* and I can see the root users password in plaintext. From there it is as simple as switching users from *alex* to *root*, navigating over to the flag, and then reading it.
+
+![plaintext password](/docs/assets/images/HTB/squashed/squashed33.png)
+
+![switch user](/docs/assets/images/HTB/squashed/squashed34.png)
+
+![root flag](/docs/assets/images/HTB/squashed/squashed35.png)
+
+![pwned](/docs/assets/images/HTB/squashed/squashed36.png)
+
+---
+
+
+<ins> **Final Thoughts** </ins>
+
+This is the first machine that I recall that's had me mess with the *Network File System* protocol. Likewise this was my first run in with the *X Window Service* so I learned a different way to capture and interact with a user's display. I also got a nice reminder to be sure to *enumerate* EVERYTHING especially *hidden files*. Overall this was a fairly easy machine but it gave me some experience with services I'd never encountered before so I was able to learn a lot from it.
+
+
+ 
 
 
 
