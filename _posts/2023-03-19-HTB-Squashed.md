@@ -1,4 +1,4 @@
-## **Hack The Box - Getting Started**
+## **Hack The Box - Squashed**
 
 **Creator:** [polarbearer](https://app.hackthebox.com/users/159204) & [C4rm310](https://app.hackthebox.com/users/undefined)
 
