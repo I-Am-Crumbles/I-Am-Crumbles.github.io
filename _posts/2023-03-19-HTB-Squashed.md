@@ -87,11 +87,9 @@ NFS supports the use of linux file permissions to control access to shared direc
 
 I start by creating a new user on the host machine, since the *UID* will by default be the highest ID found in */etc/passwd* file plus 1 I will need to then manually assign them the UID of 2017 with the `usermod` command.
 
-```
-sudo useradd impostercrumbles
+`sudo useradd impostercrumbles`
 
-sudo usermod –u 2017 impostercrumbles
-``` 
+`sudo usermod –u 2017 impostercrumbles` 
 
 ![create new user](/docs/assets/images/HTB/squashed/squashed11.png)
 
@@ -101,4 +99,33 @@ Switching over to the *impostercrumbles* user gave me a pretty terrible shell, s
 
 Now that I have access to the share that controls all of the files related to the webserver I can upload a payload to send myself a *php-reverse-shell*
 
+I used `locate` to find the php reverse shell script in the */webshells* directory and then made a copy of it in my host machines */tmp* directory to edit that I called *shell.php*.
+
+`cp /usr/share/webshells/php/php-reverse-shell.php php.shell shell.php`
+
+![locate](/docs/assets/images/HTB/squashed/squashed13.png)
+
+![copy file](/docs/assets/images/HTB/squashed/squashed14.png)
+
+From there I used `vim` to edit the *shell.php* file to include my host machines IP and the port I'd be setting my listener up on, which for me is generally *3232*, I also used `nc -lvp 3232` to set up the listener at this point. 
+
+![vim](/docs/assets/images/HTB/squashed/squashed15.png)
+
+![netcat](/docs/assets/images/HTB/squashed/squashed16.png)
+
+My terminal with the *impostercrumbles* user in the *html* mounted share was accidently closed. So I had to switch back over to it and lost my upgraded TTY in the process. However I didn't really need it as I'm just copying the *payload* over quickly before I open *firefox* then navigate over to the it in the url bar.
+
+![copy payload](/docs/assets/images/HTB/squashed/squashed17.png)
+
+![firefox](/docs/assets/images/HTB/squashed/squashed18.png)
+
+Checking my listener I can see that it caught the *reverse shell* and If I run a `whoami` I can see that I'm the user *alex*. I again used python to upgrade the TTY then navigated over to the /home/alex/ directory where I found the user flag. 
+
+![whoami](/docs/assets/images/HTB/squashed/squashed19.png)
+
+![user flag](/docs/assets/images/HTB/squashed/squashed20.png)
+
+---
+
+<ins> **Privilege Escalation** </ins>
 
