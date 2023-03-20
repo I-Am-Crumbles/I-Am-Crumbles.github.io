@@ -187,7 +187,7 @@ Back on my host machine I used `wget` to download the file. I can then use the `
 
 ![open image](/docs/assets/images/HTB/squashed/squashed32.png)
 
-The image file a screenshot of the *Passwords* file I found earlier opened in *KeePassXC* and I can see the root users password in plaintext. From there it is as simple as switching users from *alex* to *root*, navigating over to the flag, and then reading it.
+The image file is a screenshot of the *Passwords* file I found earlier opened in *KeePassXC* and I can see the root users password in plaintext. From there it is as simple as switching users from *alex* to *root*, navigating over to the flag, and then reading it.
 
 ![plaintext password](/docs/assets/images/HTB/squashed/squashed33.png)
 
