@@ -153,43 +153,39 @@ In short for my purposes this means that anyone who has access to this file can 
 
 ![curl](/docs/assets/images/HTB/squashed/squashed25.png)
 
-Now I can point the environment variable *XAUTHORITY* to the cookie and can in theory now interact with the display since I've hijacked ross' session. 
+Now I can point the environment variable *XAUTHORITY* to the cookie and can in theory now interact with the display since I've hijacked ross' session. I should be able to see what is happening on the display by taking a screenshot and then downloading the file to open it on my host machine. The first step is to use the `w` command to see which display is used by ross. The display will be listed in the *FROM* column of the command output, which in this case the name is *:0*.
 
 `export XAUTHORITY=/tmp/.Xauthority`
 
 ![export](/docs/assets/images/HTB/squashed/squashed26.png)
 
-I should be able to see what is happening on the display by taking a screenshot and then downloading the file to open it on my host machine. The first step is to use the `w` command to see which display is used by ross. The display will be listed in the *FROM* column of the command output, which in this case the name is *:0*.
-
-![display](/docs/assets/images/HTB/squashed/squashed27.png)
-
 There is a command called `xwd` that dumps an image of the *X window* graphical display. Using the man pages I'm able to see the `-help` switch will display the command usage.
 
 `man xwd`
 
-![man pages](/docs/assets/images/HTB/squashed/squashed28.png)
+![man pages](/docs/assets/images/HTB/squashed/squashed27.png)
 
 `xwd -help`
 
-![help pages](/docs/assets/images/HTB/squashed/squashed29.png)
+![help pages](/docs/assets/images/HTB/squashed/squashed28.png)
 
 I'm interested in `-root` to select the root window, `-screen` to send the request against the root window, `-silent` as a best practice to be sneaky about things, and `-display` to specify what to image dump. Putting it all together it looks like the following:
 
 `xwd –root –screen –silent –display :0 > /tmp/screen.xwd `
 
-![xwd](/docs/assets/images/HTB/squashed/squashed30.png)
+![xwd](/docs/assets/images/HTB/squashed/squashed29.png)
 
 I use `ls` to verify that the *screen.xwd* file is actually there in the */tmp* directory and that everything worked, then once again use python to serve up the file over http. This time I chose port *8888* since there is already a webserver hosting on port *80* from this machine. 
 
 `python3 -m http.server 8888`
 
-![serve it up 2](/docs/assets/images/HTB/squashed/squashed31.png)
+![serve it up 2](/docs/assets/images/HTB/squashed/squashed30.png)
 
 Back on my host machine I used `wget` to download the file. I can then use the `convert` command to convert the file from *.xwd* X-Window screen dump image data to a *.png* image file that I can use the `xdg-open` command to open. 
 
-![convert](/docs/assets/images/HTB/squashed/squashed32.png)
+![convert](/docs/assets/images/HTB/squashed/squashed31.png)
 
-![open image](/docs/assets/images/HTB/squashed/squashed33.png)
+![open image](/docs/assets/images/HTB/squashed/squashed32.png)
 
 
 
