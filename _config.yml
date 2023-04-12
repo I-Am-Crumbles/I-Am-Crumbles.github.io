@@ -42,7 +42,7 @@ header_pages:
   - resume.md
   - archive.md
 
-home_post_limit: 5
+home_posts_limit: 5
 
 defaults:
   - scope:
