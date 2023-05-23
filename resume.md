@@ -7,7 +7,7 @@ title: Resume
 
 *Cybersecurity Professional* \| *Ethical Hacker*
 
-\| murcwehttam@gmail.com \| [Linkedin](https://www.linkedin.com/in/matthew-crum/) \| [GitHub](https://github.com/I-Am-Crumbles)
+murcwehttam@gmail.com \| [Linkedin](https://www.linkedin.com/in/matthew-crum/) \| [GitHub](https://github.com/I-Am-Crumbles)
 
 <ins>**Summary:** </ins>
 
@@ -16,6 +16,7 @@ methodologies. Mastery of common CLI for Linux, with experience in Python and Ba
 writing for IPS/IDS and firewalls/routers, and IOCs investigation using packet capture tools. Well-versed in
 cybersecurity standards, practices, and ethics with a familiarity of industry standard tools such as Nmap,
 Metasploit, Wireshark, Burp Suite, Nessus, and Splunk.
+
 
 <ins> **Key Skills:** </ins>
 
@@ -33,12 +34,14 @@ Metasploit, Wireshark, Burp Suite, Nessus, and Splunk.
 
 ● IPS/IDS and firewall/router rule writing (snort)
 
+
 <ins>**Education and Certifications:** </ins>
 
 ● [CompTIA Security+](https://drive.google.com/file/d/1CjmY6Xq3lYi-E_fNmFOvElqVXXoVaCqX/view?usp=sharing) September 2022 - 2025
 
 ● [University Of Illinois Chicago Cybersecurity Bootcamp](https://drive.google.com/file/d/1yWiwe33rkFMimqQAnx4pAumbsDGjD5dJ/view?usp=share_link) June 2022
   Powered by Fullstack Academy
+
 
 <ins> **Personal Project Portfolio:** </ins>
 
@@ -52,6 +55,7 @@ on various engaging projects. The topics encompass a diverse range of technical 
 ● Crafting Python scripts for automating tasks and enhancing productivity
 
 ● Designing and implementing home lab setups for hands-on learning experiences
+
 
 <ins> **Professional Experience:** </ins>
 
