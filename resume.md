@@ -3,9 +3,9 @@ layout: page
 title: Resume
 ---
 
-<centered> ## **Matthew Crum** </centered>
+<centered> **Matthew Crum** </centered>
 
-Cybersecurity Professional \| Ethical Hacker
+*Cybersecurity Professional* \| *Ethical Hacker*
 
 Greater Chicago Area \| murcwehttam@gmail.com \| Linkedin \| GitHub
 
