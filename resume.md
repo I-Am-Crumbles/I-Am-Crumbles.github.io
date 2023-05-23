@@ -33,7 +33,7 @@ Metasploit, Wireshark, Burp Suite, Nessus, and Splunk.
 
 ● IPS/IDS and firewall/router rule writing (snort)
 
-<ins>**Education and Certifications: </ins>
+<ins>**Education and Certifications:** </ins>
 
 ● CompTIA Security+ September 2022 - 2025
 
