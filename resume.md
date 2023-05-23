@@ -7,7 +7,7 @@ title: Resume
 
 *Cybersecurity Professional* \| *Ethical Hacker*
 
-Greater Chicago Area \| murcwehttam@gmail.com \| Linkedin \| GitHub
+\| murcwehttam@gmail.com \| [Linkedin](https://www.linkedin.com/in/matthew-crum/) \| [GitHub](https://github.com/I-Am-Crumbles)
 
 <ins>**Summary:** </ins>
 
@@ -35,14 +35,14 @@ Metasploit, Wireshark, Burp Suite, Nessus, and Splunk.
 
 <ins>**Education and Certifications:** </ins>
 
-● CompTIA Security+ September 2022 - 2025
+● [CompTIA Security+](https://drive.google.com/file/d/1CjmY6Xq3lYi-E_fNmFOvElqVXXoVaCqX/view?usp=sharing) September 2022 - 2025
 
-● University Of Illinois Chicago Cybersecurity Bootcamp June 2022
+● [University Of Illinois Chicago Cybersecurity Bootcamp](https://drive.google.com/file/d/1yWiwe33rkFMimqQAnx4pAumbsDGjD5dJ/view?usp=share_link) June 2022
   Powered by Fullstack Academy
 
 <ins> **Personal Project Portfolio:** </ins>
 
-**Everyone Has A Blog, Bud** | *Content Creator* | 10/2023 | Project Github
+[Everyone Has A Blog, Bud](https://i-am-crumbles.github.io/) \| *Content Creator* \| 10/2023 \| [Project Github](https://github.com/I-Am-Crumbles/I-Am-Crumbles.github.io)
 
 My unique and comprehensive personal project portfolio, where I showcase an array of in-depth write-ups
 on various engaging projects. The topics encompass a diverse range of technical subjects such as:
