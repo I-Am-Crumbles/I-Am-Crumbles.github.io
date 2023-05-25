@@ -125,8 +125,50 @@ In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functiona
 
 ![ssrf1](/docs/assets/images/webgoat/ssrf/csrf16.png)
 
+For the first SSRF challenge on WebGoat I need to find and modify the request so that when I click "Steal the Cheese" it displays Jerry instead of Tom. If I right click the button and inspect it's element in the page I can see a hidden value that is set to images/tom.png.  
+
+![inspect button](/docs/assets/images/webgoat/ssrf/csrf17.png)
+
+If I refresh the page, inspect the button element again and this time change the hidden value to *images/jerry.png* before clicking the button it will satisfy the challenge once I do. 
+
+![edit hidden value](/docs/assets/images/webgoat/ssrf/csrf18.png)
+
+![Complete](/docs/assets/images/webgoat/ssrf/csrf19.png)
+
+Alternatively `curl` can be used as well if I inspect the network traffic and select the request tab the payload being sent in the POST request can be seen. From there I just need to modify it to say jerry instead of tom and pass it along as data in the curl POST request. 
+
+`curl -X POST -d url=images%2Fjerry.png -b "JSESSIONID=QaBoEpWVZz1X0ougnKaRDSXpa0TMid8vt4b8Worb" http://127.0.0.1:8080/WebGoat/SSRF/task1`
+
+![request payload](/docs/assets/images/webgoat/ssrf/csrf20.png)
+
+![Curl request ssrf](/docs/assets/images/webgoat/ssrf/csrf21.png)
+---
+**WebGoat SSRF Challenge 2**
+
+The second SSRF challenge is pretty much the exact same as the previous one. 
+
+![ssrf challenge 2](/docs/assets/images/webgoat/ssrf/csrf22.png)
+
+If I inspect the *Try This* button I find a hidden value set to *images/cat.png*.  
+
+![inspect button](/docs/assets/images/webgoat/ssrf/csrf23.png)
+
+If I refresh the page and then before clicking *Try This* modify the hidden value to match the *http://ifconfig.pro* URL provided it will satisfy the challenge when I do click the button. 
+
+![edit inspect page](/docs/assets/images/webgoat/ssrf/csrf24.png)
+
+![challenge complete](/docs/assets/images/webgoat/ssrf/csrf25.png)
+
+Just like before I can also use `curl`, I just have to modify the previous payload a little bit so that it matches the parameters for this challenge. 
+
+`curl -X POST -d url=http://ifconfig.pro -b "JSESSIONID=QaBoEpWVZz1X0ougnKaRDSXpa0TMid8vt4b8Worb" http://127.0.0.1:8080/WebGoat/SSRF/task2`
+
+Note that along with the payload being sent the url the request is being sent to was changed from SSRF/task1 to SSRF/task2 
+
+![with curl again](/docs/assets/images/webgoat/ssrf/csrf26.png)
 
 
+That's all for the OWASP Top 10 WebGoat Server-Side Request Forgery challenges. 
 
 
 
