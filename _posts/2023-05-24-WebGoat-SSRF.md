@@ -42,8 +42,8 @@ Common characterstics of a CSRF attack are:
 
 * It tricks the user's browser into sending requests to a target site and involves HTTP requests that have side effects. 
 
+Web applications that perform actions based on input from trusted on authenticated users without requiring the user to authorize the specific action are at risk. If a user were authenticated by a cookie saved in their web browser they could unknowingly send an http request to a site that trusts the user and cause an unwanted action. CSRF attacks target state-changing requests with exploiting a GET request being the simplest CSRF attack to perform.  
 
-Web applications that perform actions based on input from trusted on authenticated users without requiring the user to authorize the specific action are at risk. If a user were authenticated by a cookie saved in their web browser they could unknowingly send an http request to a site that trusts the user and cause an unwanted action. CSRF attacks target state-changing requests with exploiting a GET request being the simplest CSRF attack to perform. 
 ---
 **WebGoat CSRF Challenge 1**
 
