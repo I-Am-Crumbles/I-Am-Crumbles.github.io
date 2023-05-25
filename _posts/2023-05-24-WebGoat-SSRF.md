@@ -43,7 +43,7 @@ Common characterstics of a CSRF attack are:
 * It tricks the user's browser into sending requests to a target site and involves HTTP requests that have side effects. 
 
 Web applications that perform actions based on input from trusted on authenticated users without requiring the user to authorize the specific action are at risk. If a user were authenticated by a cookie saved in their web browser they could unknowingly send an http request to a site that trusts the user and cause an unwanted action. CSRF attacks target state-changing requests with exploiting a GET request being the simplest CSRF attack to perform.  
----
+
 **WebGoat CSRF Challenge 1**
 
 ![Challenge1](/docs/assets/images/webgoat/ssrf/csrf01.png)
@@ -119,8 +119,8 @@ The third challenge looks like I can solve it how I was previously trying to sol
 
 <ins> **Server-Side Request Forgery** </ins>
 
-In a Server-Side Request forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can modify a URL which the code running on the server will read and submit data to. By carefully selecting URLs, the attack may read server configurations such as metadata, connect to internal services, or perform post requests towards internal services that are not intended to be exposed. 
----
+In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can modify a URL which the code running on the server will read and submit data to. By carefully selecting URLs, the attack may read server configurations such as metadata, connect to internal services, or perform post requests towards internal services that are not intended to be exposed. 
+
 **WebGoat SSRF Challenge 1**
 
 ![ssrf1](/docs/assets/images/webgoat/ssrf/csrf16.png)
