@@ -43,7 +43,6 @@ Common characterstics of a CSRF attack are:
 * It tricks the user's browser into sending requests to a target site and involves HTTP requests that have side effects. 
 
 Web applications that perform actions based on input from trusted on authenticated users without requiring the user to authorize the specific action are at risk. If a user were authenticated by a cookie saved in their web browser they could unknowingly send an http request to a site that trusts the user and cause an unwanted action. CSRF attacks target state-changing requests with exploiting a GET request being the simplest CSRF attack to perform.  
-
 ---
 **WebGoat CSRF Challenge 1**
 
@@ -70,6 +69,67 @@ It worked. The website sends me back a flag and a message congratulating me on p
 ![flag1](/docs/assets/images/webgoat/ssrf/csrf05.png)
 ---
 **WebGoat CSRF Challenge 2**
+
+![challenge 2](/docs/assets/images/webgoat/ssrf/csrf06.png)
+
+For the second challenge I have basically do the same thing as before, but this time also include data to submit for a review. 
+
+I started off the same way I did in the previous challenge by submitting a review and just seeing what happens. 
+
+![submit comment](/docs/assets/images/webgoat/ssrf/csrf07.png)
+
+After clicking submit I just get a message that says "It appears your request is coming from the same host you are submitting to" 
+
+If I inspect the page I can see that this page is sending many requests over and over, but digging through them I find my POST request which was denied.  In the header section I can see that it's being sent to *http://127.0.0.1:8080/WebGoat/csrf/review*  I can also see that the content type is json.
+
+![inspect request](/docs/assets/images/webgoat/ssrf/csrf08.png)
+
+If I click the *Request* tab I can see the actual content that was sent.
+
+![request content](/docs/assets/images/webgoat/ssrf/csrf09.png)
+
+With this info I can use `curl` to solve this challenge as well.
+
+`curl -X POST -d 'reviewText=review&stars=5&validateReq=2aa14227b9a13d0bede0388a7fba9aa9' -b "JSESSIONID=q54uZG0kOjx6x0eoZfSPKWc_A3PO4f0j-BSHE7Lu" http://127.0.0.1:8080/WebGoat/csrf/review`
+
+I was having some trouble initially with my `curl` command and I thought the issue was that I was passing a string to the *stars* parameter so I switched to an integer, that wasn't the case however my syntax was just wrong. I decided to just keep it the integer I switched to in the payload that worked rather than switching it to the value I made up earlier.
+
+![curl success](/docs/assets/images/webgoat/ssrf/csrf10.png)
+
+There was no flag to Receive this time. But my review was posted to the site.
+
+![comment posted](/docs/assets/images/webgoat/ssrf/csrf11.png)
+---
+**WebGoat CSRF Challenge 3**
+
+![Challenge 3](/docs/assets/images/webgoat/ssrf/csrf12.png)
+
+The third challenge looks like I can solve it how I was previously trying to solve challenge 2. Passing the content type and request information to the website using curl, additionally since there is no *Access-Control-Allow-Origin* header in the *HTTP* response I had to mask the content type of the payload as plain text rather than json.
+
+![http response header](/docs/assets/images/webgoat/ssrf/csrf13.png)
+
+`curl -X POST -H "Content-Type: text/plain" -d '{"name": "WebGoat", "email": "webgoat@webgoat.org", "content": "WebGoat is the best!!"}' -b "JSESSIONID=q54uZG0kOjx6x0eoZfSPKWc_A3PO4f0j-BSHE7Lu" http://127.0.0.1:8080/WebGoat/csrf/feedback/message`
+
+![curl challenge 3](/docs/assets/images/webgoat/ssrf/csrf14.png)
+
+![challenge 3 flag](/docs/assets/images/webgoat/ssrf/csrf15.png)
+
+---
+
+
+<ins> **Server-Side Request Forgery** </ins>
+
+In a Server-Side Request forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can modify a URL which the code running on the server will read and submit data to. By carefully selecting URLs, the attack may read server configurations such as metadata, connect to internal services, or perform post requests towards internal services that are not intended to be exposed. 
+---
+**WebGoat SSRF Challenge 1**
+
+![ssrf1](/docs/assets/images/webgoat/ssrf/csrf16.png)
+
+
+
+
+
+
 
 
 
