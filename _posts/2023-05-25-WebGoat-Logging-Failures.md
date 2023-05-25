@@ -91,4 +91,51 @@ In order to cover their tracks, evade detection systems, delay reactions, or mis
 
 ![Challenge1](/docs/assets/images/webgoat/loggingfailures/logging01.png)
 
+For this challenge I have to make the login log look like user admin was able to successfully logon. My first step was to try to log myself in to see what happened.
+
+![login attempt](/docs/assets/images/webgoat/loggingfailures/logging02.png)
+
+Just a message saying I failed the challenge. The log output highlighted in red changed to include my username though. If I right click on that red highlight and inspect the page it takes me right to where it's happening within the HTML. 
+
+![inspect](/docs/assets/images/webgoat/loggingfailures/logging03.png)
+
+I can see the Log output is coded into the HTML. I Just have to change the word failed to succeeded. Then if I try to log in as the user admin but guess the password wrong the log will record my altered message satisfying the challenge. 
+
+![change inspect](/docs/assets/images/webgoat/loggingfailures/logging04.png)
+
+![pwned](/docs/assets/images/webgoat/loggingfailures/logging05.png)
+---
+
+**Challenge 2**
+
+![Challenge 2](/docs/assets/images/webgoat/loggingfailures/logging06.png)
+
+For the second challenge I need to analyze the WebGoat server application log for the login credentials of the admin user. Application logs are typically in one of two places on a Linux system */var/log/application_name* or *~/.application_name*. In WebGoat's case it's *~/.webgoat-2023.4*(2023.4 being the current version as of writing this). Navigating over to that directory I find an ASCII text file named *webgoat.log*. 
+
+![Webgoat log](/docs/assets/images/webgoat/loggingfailures/logging07.png)
+
+Unfortunately there wasn't a whole lot about the admin user in the log file. 
+
+![Failed](/docs/assets/images/webgoat/loggingfailures/logging08.png)
+
+The challenge did mention that some applications provide administrator credentials at boot up. Since I'm the one who started the WebGoat server I can just check it out in my terminal. 
+
+![start webgoat](/docs/assets/images/webgoat/loggingfailures/logging09.png)
+
+If I scroll far enough down I find the admins password *ZWY1ODAwNzYtNjIzNS00OTUxLWEzNWItMzFlNmVlNzdiNmMx* being broadcast in all of the startup messages.
+
+![Encoded Password](/docs/assets/images/webgoat/loggingfailures/logging10.png)
+
+The challenge says that the password needs decoding. Since it is a mix of capital letters, lowercase letters, and numbers it's likely base64 encoded which means it can easily be decoded right from the command line.
+
+`echo "ZWY1ODAwNzYtNjIzNS00OTUxLWEzNWItMzFlNmVlNzdiNmMx" | base64 -d`
+
+![Decoded Password](/docs/assets/images/webgoat/loggingfailures/logging11.png)
+
+The password decodes to what seems to be a random string *ef580076-6235-4951-a35b-31e6ee77b6c1* but I tried logging in as *Admin* with it and it worked. 
+
+![pwned](/docs/assets/images/webgoat/loggingfailures/logging12.png)
+
+
+That's all for WebGoat's Security Logging and Monitoring Failures Challenges.
 
