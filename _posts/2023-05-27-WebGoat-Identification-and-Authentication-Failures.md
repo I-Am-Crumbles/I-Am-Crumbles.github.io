@@ -39,12 +39,12 @@ Credential theft is also an issue. Attackers steal user credentials through tech
 
 Phishing is a social engineering attack where an attacker attempts to deceive users into revealing their sensitive information like usernames, passwords, or other authentication credentials. There are many kinds of phishing attacks and as technologies evolve they only get more creative. Some common ones to look out for are: 
 
-* Email Phishing: The most common form of phishing, this ty pe of attack uses tactics like phony hyperlinks to lure email recipients into sharing their personal information. Attackers will mimic legitimate entities such as Google, Amazon, or even a co-worker. 
-* Malware Phishing: This type of attack involves planting malware disguised as a trustworthy attachment in an email. In some cases opening a malware attachment can bring down entire IT systems.  
-* Spear Phishing: Most phishing attacks cast a wide net, spear phishing targets specific individuals by exploiting information gathered through research into their jobs and personal lives. These attacks are highly customized to the individual making them particularly effective. 
-* Whaling: When attackers go after a high profile target like a business executive or politician. These scammers often conduct considerable research into their targets to find an opportune moment to steal login credentials or other sensitive information.  
-* Smishing: A combination of SMS and Phishing, it involves sending text messages disguised as trustworthy communications from businesses like UPS or the bank. People are particularly vulnerable to SMS scams as text messages often come across as more personal. 
-* Vishing: Attackers in fraudulent call centers attempt to trick people into providing sensitive information over the phone. In many cases the intention of these scams is to use social engineering to dupe victims into installing malware onto their devices. 
+* **Email Phishing:** The most common form of phishing, this ty pe of attack uses tactics like phony hyperlinks to lure email recipients into sharing their personal information. Attackers will mimic legitimate entities such as Google, Amazon, or even a co-worker. 
+* **Malware Phishing:** This type of attack involves planting malware disguised as a trustworthy attachment in an email. In some cases opening a malware attachment can bring down entire IT systems.  
+* **Spear Phishing:** Most phishing attacks cast a wide net, spear phishing targets specific individuals by exploiting information gathered through research into their jobs and personal lives. These attacks are highly customized to the individual making them particularly effective. 
+* **Whaling:** When attackers go after a high profile target like a business executive or politician. These scammers often conduct considerable research into their targets to find an opportune moment to steal login credentials or other sensitive information.  
+* **Smishing:* A combination of SMS and Phishing, it involves sending text messages disguised as trustworthy communications from businesses like UPS or the bank. People are particularly vulnerable to SMS scams as text messages often come across as more personal. 
+* **Vishing:** Attackers in fraudulent call centers attempt to trick people into providing sensitive information over the phone. In many cases the intention of these scams is to use social engineering to dupe victims into installing malware onto their devices. 
 
 It is crucial to educate users about the threat and encourage them to be cautious while interacting with emails, websites, or messages that request sensitive information. Additionally organizations should implement multi-factor authentication and employ anti-phishing measures such as email filters and website verification mechanisms.  
 
@@ -53,6 +53,7 @@ It is crucial to educate users about the threat and encourage them to be cautiou
 <ins> **WebGoat Identification and Authentication Failures Challenges** </ins>
 
 **Challenge 1**
+
 *Authentication Bypasses*
 
 ![Challenge1](/docs/assets/images/webgoat/authfailures/auth01.png)
@@ -77,31 +78,90 @@ The function that is used to verify that the secret questions have been answered
 
 ![rename params](/docs/assets/images/webgoat/authfailures/auth07.png)
 
-Changing secQuestion0 and secQuestion1 to secQuestion2 and secQuestion3 respectively satisfied the requirements of the challenge and allows me to bypass MFA. 
+Changing *secQuestion0* and *secQuestion1* to *secQuestion2* and *secQuestion3* respectively satisfied the requirements of the challenge and allows me to bypass the MFA. 
 
 ![complete](/docs/assets/images/webgoat/authfailures/auth08.png)
 ---
 
 **Challenge 2**
+
 *Insecure Login*
 
 ![Challenge2](/docs/assets/images/webgoat/authfailures/auth09.png)
 
-If I inspect the page and open the Network tab to analyze the network traffic I can see that I'm once again being spammed with requests from WebGoat. But if I click the login button I can filter through them for the POST request to see what happened. 
+If I inspect the page and open the Network tab to analyze the network traffic I can see that I'm once again being spammed with requests from WebGoat. But if I click the login button I can filter through them for the *POST* request to see what happened. 
 
 ![Inspect 1](/docs/assets/images/webgoat/authfailures/auth10.png)
 
 ![Inspect 2](/docs/assets/images/webgoat/authfailures/auth11.png)
 
-From there I can click the Request tab on the right hand side and see the parameters being passed to the request are Password: "BlackPearl" and username:"CaptainJack". 
+From there I can click the Request tab on the right hand side and see the parameters being passed to the request are *Password:"BlackPearl"* and *username:"CaptainJack"*. 
 
 ![creds](/docs/assets/images/webgoat/authfailures/auth12.png)
 
 Logging in with them satisfies the requirements of the challenge. 
 
 ![complete 2](/docs/assets/images/webgoat/authfailures/auth13.png)
+---
 
+**Challenge 3**
 
+*Decoding a JWT Token*
+
+![challenge 3](/docs/assets/images/webgoat/authfailures/auth14.png)
+
+For this challenge I just need to copy the JWT token and decode it. From there I should find a username in the decoded message.  The challenge suggests using the JWT functionality inside of *WebWolf* however I prefer to just use [Cyberchef](https://gchq.github.io/CyberChef/). All I need to do is navigate over to it in my web browser, search for and select JWT decode on the left hand side, drag that function over to my recipe in the center, and paste the token in the input field on the right hand side. Once I decode and scroll through the output I can see the username *"user"* in plaintext. 
+
+![username](/docs/assets/images/webgoat/authfailures/auth15.png)
+
+![complete3](/docs/assets/images/webgoat/authfailures/auth16.png)
+---
+
+**Challenge 4**
+
+*JWT Signing*
+
+![challenge 4](/docs/assets/images/webgoat/authfailures/auth17.png)
+
+For the JWT signing challenge I need to try to change the token I receive and become an *admin* user by changing the token, and then once admin reset the votes. 
+
+The guest user Can't do anything but in the upper right hand side I see I'm able to switch to a couple of users. If I open the Network traffic inspection tools and login as *Tom* I can find his *token* in the *GET* request. I also noted that when I switched to user Tom I could now see the Vote totals for each choice. 
+
+![vote totals](/docs/assets/images/webgoat/authfailures/auth18.png)
+
+`eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODYwNjQzODksImFkbWluIjoiZmFsc2UiLCJ1c2VyIjoiVG9tIn0.f3It-NA5PmJYFG80kT6rXkRrmM-Kfwh5NpKQLcsZOEfZ6_gwaqQihoo6dbMLmoxgaBaDTQvjbWK9UeH9oND86g `
+
+![token](/docs/assets/images/webgoat/authfailures/auth19.png)
+
+ 
+
+If I head back into *Cyberchef* I can decode the token. This time it's been further encoded into Base64, so I have to decode it that way first. 
+
+![cyberchef](/docs/assets/images/webgoat/authfailures/auth20.png)
+
+A lot of the output is unreadable but a few parameters are plaintext. Mainly *alg* and *admin*. Cyberchef has a handy feature that allows me to swap the Output with the Input located to the right of the save and copy functions in the output section. Doing so allows me to edit the parameter to read:
+
+```
+{"alg":"null"}{"iat":1686064389,"admin":"true","user":"Tom"}ÜMæ%FóIêµäF¹)ü!äÚJ@·,dág¨0j¤":u³ 
+`hM 
+ãmb½Qáý Ðüê 
+```
+Changing *alg* to *null* means the token won't try to verify the algorithm it was signed with and if I set *admin* to *true* Tom should gain admin privileges when I log in as him. I also need to switch Base64 Decoding to Encoding in the recipe so that way my token gets encoded how the web application expects. 
+
+![swap](/docs/assets/images/webgoat/authfailures/auth21.png)
+
+The leading *=* in the base64 encoded string can mess things up so I'm going to manually remove it as well. 
+
+`eyJhbGciOiJudWxsIn17ImlhdCI6MTY4NjA2NDM4OSwiYWRtaW4iOiJ0cnVlIiwidXNlciI6IlRvbSJ9H9yLTQOT5iWBRvNJE+q15Ea5jCn8IeTaSkC3LGThH2eoMGqkIoaKOnWzC5qMYGgWg00L421ivVHh/aDQ/Oo`
+
+Now if I load up Burp Suite and set myself up so that I'm logged in as user Tom, turn interceptor on in burp and click the "reset votes" button at the top I can capture and edit my newly crafted token into the request.  
+
+![burp request](/docs/assets/images/webgoat/authfailures/auth22.png)
+
+When I hit forward in the proxy I can switch back over to the webpage to see I'm logged in as Tom and all of the votes have been reset. 
+
+![complete4](/docs/assets/images/webgoat/authfailures/auth23.png)
+---
 
 
 
