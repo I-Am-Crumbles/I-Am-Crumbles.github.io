@@ -163,6 +163,147 @@ When I hit forward in the proxy I can switch back over to the webpage to see I'm
 ![complete4](/docs/assets/images/webgoat/authfailures/auth23.png)
 ---
 
+**Challenge 5**
+
+*Code Review*
+
+For this challenge I just have to review two snippets of code and answer a multiple choice question about each. 
+
+Snippet 1:
+
+```
+try { 
+
+   Jwt jwt = Jwts.parser().setSigningKey(JWT_PASSWORD).parseClaimsJws(accessToken); 
+
+   Claims claims = (Claims) jwt.getBody(); 
+
+   String user = (String) claims.get("user"); 
+
+   boolean isAdmin = Boolean.valueOf((String) claims.get("admin")); 
+
+   if (isAdmin) { 
+
+     removeAllUsers(); 
+
+   } else { 
+
+     log.error("You are not an admin user"); 
+
+   } 
+
+} catch (JwtException e) { 
+
+  throw new InvalidTokenException(e); 
+
+} 
+```
+
+Snippet 2:
+
+```
+try { 
+
+   Jwt jwt = Jwts.parser().setSigningKey(JWT_PASSWORD).parse(accessToken); 
+
+   Claims claims = (Claims) jwt.getBody(); 
+
+   String user = (String) claims.get("user"); 
+
+   boolean isAdmin = Boolean.valueOf((String) claims.get("admin")); 
+
+   if (isAdmin) { 
+
+     removeAllUsers(); 
+
+   } else { 
+
+     log.error("You are not an admin user"); 
+
+   } 
+
+} catch (JwtException e) { 
+
+  throw new InvalidTokenException(e); 
+
+} 
+```
+
+
+![Questions](/docs/assets/images/webgoat/authfailures/auth24.png)
+
+ 
+
+Answer 1 is *Throws an exception in line 12*
+
+Answer 2 is *Invoked the method removeAllUsers at line 7.* 
+
+![complete5](/docs/assets/images/webgoat/authfailures/auth25.png)
+---
+
+**Challenge 6**
+
+*JWT Cracking*
+
+![challenge 6](/docs/assets/images/webgoat/authfailures/auth26.png)
+
+For this challenge I copy the provided token and paste it into an empty file I called *token.txt*. I then ran `john` against that file. It returned the signature secret word *shipping*. 
+
+![john](/docs/assets/images/webgoat/authfailures/auth27.png)
+
+Navigating over to [jwt.io](https://jwt.io/) I paste the token into the decoder. As I edit the decoded output to match the parameters required by the challenge the encoded JWT on the left changes with it. I changed the expiration to a later time, the user name to WebGoat and added the Signature Secret shipping. 
+
+From there I just copy the encoded JWT and paste it into the submission field for the challenge. 
+
+`eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJXZWJHb2F0IFRva2VuIEJ1aWxkZXIiLCJhdWQiOiJ3ZWJnb2F0Lm9yZyIsImlhdCI6MTY4NTIwMzcyMiwiZXhwIjoxNjg1Mjk5OTk5LCJzdWIiOiJ0b21Ad2ViZ29hdC5vcmciLCJ1c2VybmFtZSI6IldlYkdvYXQiLCJFbWFpbCI6InRvbUB3ZWJnb2F0Lm9yZyIsIlJvbGUiOlsiTWFuYWdlciIsIlByb2plY3QgQWRtaW5pc3RyYXRvciJdfQ.er_iQ3HWukjyi5775A2aUwmUH_1aeZ7KkkP9CGg0k6Q `
+
+![token](/docs/assets/images/webgoat/authfailures/auth28.png)
+
+![complete6](/docs/assets/images/webgoat/authfailures/auth29.png)
+---
+
+**Challenge 7**
+
+*Refreshing a Token*
+
+![challenge7](/docs/assets/images/webgoat/authfailures/auth30.png)
+
+If I open the link to the log file I'm greeted with a page that contains an expired JWT token. 
+
+![logged token](/docs/assets/images/webgoat/authfailures/auth31.png)
+
+If I paste that token into the decoder on [jwt.io](https://jwt.io/) I can see that it is user Tom's token, but it expired way back in 2018. I can also see the *HS512* algorithm in the header. 
+
+![decode token](/docs/assets/images/webgoat/authfailures/auth32.png)
+
+If I open Burp and capture the request when I click check out I can see that it has the parameter "Authorization Bearer Null"  
+
+![burp request](/docs/assets/images/webgoat/authfailures/auth33.png)
+
+If I modify the token above so that the expiration date is in the future and that the algorithm in the header is set to "null" I should be able to replace *Null* in the *Authorization parameter* with the token and satisfy the requirements of the challenge. 
+
+To do this I'll need to copy and paste the first part of token, `eyJhbGciOiJIUzUxMiJ9`, to the decoder in Burp Suite. In the first field if I "Decode as base64" it will display *{"alg":"HS512"}*
+
+![decode](/docs/assets/images/webgoat/authfailures/auth34.png)
+
+I can now edit the second field so that *{"alg":"HS512"}* now displays as *{"alg":"null"}* and If I select "encode as base64" on the right it will give me a base64 encoded string of JWT header algorithm set to null. 
+
+![encode](/docs/assets/images/webgoat/authfailures/auth35.png)
+
+Removing the leading equal sign gives me the new header to my imposter JWT token. 
+
+`eyJhbGciOiJudWxsIn0` 
+
+Now I just need to modify the rest of the JWT token, which can be done on [jwt](https://jwt.io/) just by editing the expiration time field to same date in the future. 
+
+![logged token](/docs/assets/images/webgoat/authfailures/auth36.png)
+
+
+
+![logged token](/docs/assets/images/webgoat/authfailures/auth37.png)
+
+![complete 7](/docs/assets/images/webgoat/authfailures/auth38.png)
+
 
 
 
