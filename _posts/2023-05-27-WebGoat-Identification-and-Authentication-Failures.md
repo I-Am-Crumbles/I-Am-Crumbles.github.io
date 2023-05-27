@@ -294,16 +294,22 @@ Removing the leading equal sign gives me the new header to my imposter JWT token
 
 `eyJhbGciOiJudWxsIn0` 
 
-Now I just need to modify the rest of the JWT token, which can be done on [jwt](https://jwt.io/) just by editing the expiration time field to same date in the future. 
+Now I just need to modify the rest of the JWT token, which can be done on [jwt](https://jwt.io/) just by editing the expiration time field to some date in the future. 
 
 ![logged token](/docs/assets/images/webgoat/authfailures/auth36.png)
 
+Now I just need to combine the second portion of the token above with my modified token header from earlier and that will give me my imposter token. I don't need the signature because the request should generate a new one when it processes. 
 
+`eyJhbGciOiJudWxsIn0.eyJpYXQiOjE1MjYxMzE0MTEsImV4cCI6MTY4NTIxMDMwNywiYWRtaW4iOiJmYWxzZSIsInVzZXIiOiJUb20ifQ.`
+
+Back in Burp Suite's proxy I just edit the Authorization parameter to contain my new token and forward the request. 
 
 ![logged token](/docs/assets/images/webgoat/authfailures/auth37.png)
 
 ![complete 7](/docs/assets/images/webgoat/authfailures/auth38.png)
+---
 
+Unfortunately I was unable to solve the final JWT challenge. The remainder of the Identification and Authentication Failures section of WebGoat aren't really challenges so much as explanations of the various kinds of flaws that can be found with password strength, MFA, and reset mechanisms. 
 
 
 
