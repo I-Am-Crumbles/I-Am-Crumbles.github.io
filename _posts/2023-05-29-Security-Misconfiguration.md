@@ -7,7 +7,7 @@ This is post six of a series where I will be doing WebGoats challenges to furthe
 
 ---
 
-<ins> **\#5. Security Misconfigurations
+<ins> **\#5. Security Misconfigurations** </ins>
   
   
   
