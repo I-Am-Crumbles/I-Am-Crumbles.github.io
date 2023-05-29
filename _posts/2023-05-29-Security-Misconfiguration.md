@@ -9,6 +9,88 @@ This is post six of a series where I will be doing WebGoats challenges to furthe
 
 <ins> **\#5. Security Misconfigurations** </ins>
   
-  
-  
+  Security Misconfiguration is one of the most common vulnerabilities on the list. It is often the result of using default configurations or displaying excessively verbose errors. For instance, an application could show a user overly descriptive error messages which may reveal vulnerabilities in the application.  
+
+An application is likely vulnerable if it: 
+
+* Is Missing appropriate security hardening or has improperly configured permissions on cloud services.  
+* Has unnecessary features enabled or installed. 
+* Utilizes default login credentials. 
+* Has overly informative error messages to its users. 
+* Has the latest security features disabled or not configured correctly. 
+* Has the security settings in the application servers, frameworks, databases, etc., set to insecure values. 
+* Does not send security headers or directives, or they are not set to secure values. 
+* Utilizes out of data software or components. 
+
+General preventative measures include:
+
+* A repeatable, automated, hardening process makes it fast and easy to deploy another environment that is appropriately locked down.   
+* Environments should all be configured identically with different credentials used in each. 
+* Platforms should be minimal without unnecessary features, components, documentation, or samples. Remove or do not install unused frameworks and features. 
+* A task to review and update the configurations appropriate to all security updates, and patches as part of the patch management process. 
+* A segmented application architecture provides effective and secure separation between components and tenants. 
+* Sending security directives to clients. 
+* An automated process to verify the effectiveness of the configurations and settings in all environments. 
+
+---
+
+<ins> **XML External Entity Attacks** </ins>
+
+*XML External Entity (XXE)* attacks target a type of vulnerability that can occur in applications that process *Extensible Markup Language (XML)* data. XML is a widely used markup language for structuring and storing data. It uses tags to define elements and their relationships withing a document, similar to HTML but more flexible. 
+
+External entities are a way to reference and include external resources within an XML document. These entities are like placeholders that can be expanded to include the content they represent. An XXE attack takes advantage of this capability by manipulating XML inputs to exploit a vulnerability. 
+
+An attack generally works as follows:
+
+* An application or system accepts XML data as input, which may include external entity references. 
+* The attacker intentionally crafts a malicious XML payload and submits it to the target system. 
+* The payload contains a reference to an external entity controlled by the attacker, typically a remote file or resource. 
+* When the XML is processed by the application it attempts to expand the external entity reference fetching and incorporating the content from the specified location. 
+* The attacker can then use this behavior to perform various actions, such as reading sensitive files, accessing internal resources, or launching further attacks. 
+
+To help prevent against XXE attacks: 
+
+* Implement strict input validation mechanisms for XML data.  
+* Disable external entity resolution, this prevents the expansion of external entity references. 
+* User a security XML parsing library. 
+* Define a whitelist of allowed XML elements, attributes, and entities your applications supports. Reject any XML inputs that contain disallowed elements or entities. 
+* Separate data from code. 
+* Keep your software up to date. 
+* Use safer alternatives like JSON. 
+
+---
+
+<ins> **WebGoat Challenges** </ins>
+
+**Challenge 1**
+
 ![Challenge1](/docs/assets/images/webgoat/misconfigs/xxe01.png) 
+
+I start the challenge out by submitting a comment and capturing the request in Burp Suite so I can see what's happening  
+
+![comment1](/docs/assets/images/webgoat/misconfigs/xxe02.png)
+
+![request1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
+
+I can see the comment data being sent as XML in the POST request. I just need to edit the data to include a payload that injects a command to display the contents of the root directory. 
+
+```
+<?xml version="1.0"?> 
+<!DOCTYPE another [ 
+  <!ENTITY fs SYSTEM "file:///"> 
+]> 
+<comment> 
+<text> 
+comment
+&fs; 
+</text> 
+</comment> 
+```
+
+![Challenge1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
+
+
+![Challenge1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
+
+
+![Challenge1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
