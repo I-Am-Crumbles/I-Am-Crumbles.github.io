@@ -70,27 +70,54 @@ I start the challenge out by submitting a comment and capturing the request in B
 
 ![comment1](/docs/assets/images/webgoat/misconfigs/xxe02.png)
 
-![request1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
+![request1](/docs/assets/images/webgoat/misconfigs/xxe03.png)
 
 I can see the comment data being sent as XML in the POST request. I just need to edit the data to include a payload that injects a command to display the contents of the root directory. 
 
 ```
 <?xml version="1.0"?> 
-<!DOCTYPE another [ 
+  <!DOCTYPE another [ 
   <!ENTITY fs SYSTEM "file:///"> 
 ]> 
 <comment> 
-<text> 
-comment
-&fs; 
-</text> 
+    <text> 
+    comment
+    &fs; 
+  </text> 
 </comment> 
 ```
-
-![Challenge1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
-
-
-![Challenge1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
+Line 1 is an *XML declaration* which indicates the version of XML being used. Then line 2 is the *Document type Definition* declaration. This defines the structure and rules for the XML document. Within the *DTD* and external entity declaration is made `<!ENTITY fs SYSTEM "file:///"> ]> "`. This declares an entity named *fs* that references an external resource using `SYSTEM`, which in this case is the root of the file system. Finally the comment from the original XML code is edited to reference the *fs* entity created earlier. 
 
 
-![Challenge1](/docs/assets/images/webgoat/misconfigs/xxe01.png)
+![requestedit](/docs/assets/images/webgoat/misconfigs/xxe04.png)
+
+I see in the screenshot above I left the named entity off of my payload by accident so the contents of the file system weren't displayed in the comments at the time. For some reason the challenge still displayed as successful though.
+
+![complete1](/docs/assets/images/webgoat/misconfigs/xxe05.png)
+---
+
+**Challenge 2**
+
+*Modern Rest Framework*
+
+![Challenge2](/docs/assets/images/webgoat/misconfigs/xxe06.png)
+
+This challenge wants me to repeat the XML injections from the previous exercise and see what happens. So I load up burp and try again. 
+
+![request2](/docs/assets/images/webgoat/misconfigs/xxe07.png)
+
+![editrequest2](/docs/assets/images/webgoat/misconfigs/xxe08.png)
+
+I receive an error message telling me that I am posting *JSON*.
+
+![json error](/docs/assets/images/webgoat/misconfigs/xxe09.png)
+
+If I go back and check out that request I can see that the *Content-Type* in the header is listed as JSON. If I just change this to *XML* and then forward the payload it will satisfy the challenge. 
+
+![content type](/docs/assets/images/webgoat/misconfigs/xxe10.png)
+
+![request edit](/docs/assets/images/webgoat/misconfigs/xxe11.png)
+
+![complete2](/docs/assets/images/webgoat/misconfigs/xxe12.png)
+
+
