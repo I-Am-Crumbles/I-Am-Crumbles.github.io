@@ -140,6 +140,68 @@ Password: passW0rD
 
 <ins> **WebGoat Path Traversal Challenges** </ins>
 
+**Challenge 1**
+
+*Path Traversal While Uploading Files*
+
+![challenge1](/docs/assets/images/webgoat/injection/inject16.png)
+
+For this challenge I need to use path traversal to overwrite a file I upload onto the system. I start by uploading an image to see what happens. 
+
+![upload](/docs/assets/images/webgoat/injection/inject17.png)
+
+I get the file path to the image I uploaded. `home/crumbles/.webgoat-2023.4/PathTraversal/crumbles/test"`
+
+I captured the image upload request in Burp Suite to better see what was going on. Inside the request I'm able to find the parameter where the file path for the uploaded image is created. I can see in my case it's assigned a *fullname* of *test*. 
+
+![request1](/docs/assets/images/webgoat/injection/inject18.png)
+
+If I send this request to the *repeater* I can edit the *fullname* parameter to change the file name. In this case to satisfy the challenge I edit `../` in front of the existing *test* *fullname*. In doing so I overwrite the existing *test* file on the system. 
+
+![edit request](/docs/assets/images/webgoat/injection/inject19.png)
+
+![congrats](/docs/assets/images/webgoat/injection/inject20.png)
+
+**Challenge 2**
+
+*Path Traversal While Uploading Files Continued*
+
+![challenge2](/docs/assets/images/webgoat/injection/inject21.png)
+
+In this challenge the developers have implemented a fix for the attack in the previous challenge and I need to find another work around. 
+
+If I send the request back to the repeater and modify the *fullname* parameter like I did previously I see that the leading `../` gets dropped from the URL. 
+
+![request2](/docs/assets/images/webgoat/injection/inject22.png)
+
+Experimenting a little I'm able to learn that the fullname parameter will drop a leading `../` and `/`, but not a leading `.` or `..`.
+
+![edit1](/docs/assets/images/webgoat/injection/inject23.png)
+
+![edit2](/docs/assets/images/webgoat/injection/inject24.png)
+
+![edit3](/docs/assets/images/webgoat/injection/inject25.png)
+
+So if I edit the *fullname* parameter so that once it removes the `../` pattern I'm left with that pattern in the URL anyway it'll satisfy the challenge. It'll look like this `....//`  
+
+![complete2](/docs/assets/images/webgoat/injection/inject26.png)
+
+**Challenge 3**
+
+*Path Traversal While Uploading Files Continued*
+
+
+![challenge3](/docs/assets/images/webgoat/injection/inject27.png)
+
+If I open up the *repeater* again and attempt the solution from the previous challenge I see that the fullname parameter no longer creates the filename, it's now created by the name of the image I uploaded.  
+
+![request3](/docs/assets/images/webgoat/injection/inject28.png)
+
+If I scroll back up through the request in the repeater I can find the file name parameter that I need to change. Like previously making the url display `../test` as the filename will satisfy the challenge.
+
+![filename](/docs/assets/images/webgoat/injection/inject29.png)
+
+![complete3](/docs/assets/images/webgoat/injection/inject30.png)
 
 ---
 
