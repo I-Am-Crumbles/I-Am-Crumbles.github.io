@@ -34,7 +34,7 @@ The concept is identical among all interpreters. Source code review is the best 
 
 <ins> **WebGoat SQL Injection Challenges** </ins>
 
-**Challenge 1*
+**Challenge 1**
 
 *What is SQL?*
 
