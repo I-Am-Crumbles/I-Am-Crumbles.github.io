@@ -32,7 +32,7 @@ The concept is identical among all interpreters. Source code review is the best 
 
 ---
 
-<ins> *WebGoat SQL Injection Challenges** </ins>
+<ins> **WebGoat SQL Injection Challenges** </ins>
 
 **Challenge 1*
 
@@ -139,5 +139,83 @@ Password: passW0rD
 ---
 
 <ins> **WebGoat Path Traversal Challenges** </ins>
+
+
+---
+
+<ins> **WebGoat Cross Site Scripting Challenges** </ins>
+
+**Challenge 1**
+
+*Try It! Using Chrome or Firefox*
+
+![challenge1](/docs/assets/images/webgoat/injection/inject31.png)
+
+If I open up the inspector tools and head over to the *console* tab and insert the alert the challenge provided for me I can see it generates a pop up alert displaying my sessions cookie. 
+
+![console1](/docs/assets/images/webgoat/injection/inject32.png)
+
+![console2](/docs/assets/images/webgoat/injection/inject33.png)
+
+Since the cookies are the same on each tab I complete the challenge manually. 
+
+![complete1](/docs/assets/images/webgoat/injection/inject34.png)
+
+**Challenge 2**
+
+*Reflected XSS*
+
+![challenge2](/docs/assets/images/webgoat/injection/inject35.png)
+
+I start off this challenge by clicking the Purchase button at the bottom of the page and seeing what happens. 
+
+![purchase](/docs/assets/images/webgoat/injection/inject36.png)
+
+I can see I'm returned some information in a generated response. Outside of the error message related to the challenge I receive the credit card number used to make the purchase and the total of the price column. Since the only field I really have any control over in that regard is the *credit card number* field I entered the basic alert script `<script>alert()</script>` into it and click purchase. This time it causes the JavaScript to execute once the page loads the script instead of the credit card number. 
+
+![complete2](/docs/assets/images/webgoat/injection/inject37.png)
+
+**Challenge 3**
+
+*DOM-Based XSS*
+
+![challenge3](/docs/assets/images/webgoat/injection/inject38.png)
+
+For this challenge I need to find the route for the test code that was left in from production. The challenge also states that I will have to check the JavaScript source. If I open the inspector window and select the debugger tab I can see a directory called *WebGoat/js*, digging through that I eventually find a file called *GoatRouter.js* which sounds like something that would contain a *base route* Looking through the code in this file I eventually find a *routes* function with a parameter named *test*. 
+
+![debugger](/docs/assets/images/webgoat/injection/inject39.png)
+
+So I can edit the *base route* provided in the sample to contain the *test* parameter instead of *lesson* and it will satisfy the challenge.   
+
+`start.mvc#lesson/` becomes `start.mvc#test/` 
+
+![complete3](/docs/assets/images/webgoat/injection/inject40.png)
+
+**Challenge 4**
+
+*DOM-BASED XSS Continued*
+
+![challenge4](/docs/assets/images/webgoat/injection/inject41.png)
+
+For this challenge I need to use the route I just found to reflect a parameter from the route without encoding to execute a function in WebGoat. The function for the challenge is provided to me. 
+
+In my case the URL looks like this: 
+
+`http://127.0.0.1:8080/WebGoat/start.mvc#lesson/CrossSiteScripting.lesson/10` 
+
+![url](/docs/assets/images/webgoat/injection/inject42.png)
+
+Opening a new tab I need to modify the url replacing everything after `lesson`. I know `lesson` will be replaced with `test` and then I need to replace the parameter in the next section of the url with a script that calls the function I was provided. `%3Cscript%3Ewebgoat.customjs.phoneHome()%3C%2Fscript%3E`. 
+
+Putting it all together it looks like this: 
+
+`http://127.0.0.1:8080/WebGoat/start.mvc#test/%3Cscript%3Ewebgoat.customjs.phoneHome()%3C%2Fscript%3E` 
+
+![insert script](/docs/assets/images/webgoat/injection/inject43.png)
+
+*1077798770* 
+
+![complete4](/docs/assets/images/webgoat/injection/inject44.png)
+
 
 
