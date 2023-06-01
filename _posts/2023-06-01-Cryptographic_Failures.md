@@ -54,6 +54,7 @@ Encoding is a general term used for various data transformation processes some o
  * *Unicode*: A standard for representing characters from different writing systems. Unicode provides various encoding schemes such as UTF-8, UTF-16, and UTF-32, which assign unique numeric values to each character. 
  * *UUEncode*: A binary-to-text encoding scheme primarily used in Unix systems for converting binary data into ASCII characters. It was commonly used for encoding binary files for transmission over E-mail. 
  * *XOR*: Exclusive OR encoding is a simple form of encryption that uses the XOR operation between a data stream and a key to transform data. XOR encoding is symmetric meaning the same operation is used for both encoding and decoding. 
+
 ---
 
 <ins> **Encryption Vs Hashing** </ins>
