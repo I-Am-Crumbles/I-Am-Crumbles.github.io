@@ -51,9 +51,11 @@ Encoding is a general term used for various data transformation processes some o
  * *Base64*: A binary-to-text encoding scheme that converts binary data into a set of printable ASCII characters. Commonly used for encoding binary data in email attachments, cryptographic operations, and data storage. 
  * *URL*: Used to represent special characters in a URL. It replaces reserved characters with a percent sign followed by their ASCII code in hexadecimal format. For example space is encoded as `%20` and the equals sign is encoded as `%3D`. 
  * *HTML*: Used to represent special characters within HTML documents. It replaces reserved characters with character entities. For example the less-than sign `<` is represented as `&lt;`, adn the greater-than sign `>` is represented as `&gt;`.  
- * *Unicode*: A standard for representing characters from different writing systems. Unicode provides various encoding schemes such as UTF-8, UTF-16, and UTF-32, which assign unique numeric values to each character. 
- * *UUEncode*: A binary-to-text encoding scheme primarily used in Unix systems for converting binary data into ASCII characters. It was commonly used for encoding binary files for transmission over E-mail. 
+ * *Unicode*: A standard for representing characters from different writing systems. Unicode provides various encoding schemes such as UTF-8, UTF-16, and UTF-32, which assign unique numeric values to each character.
  * *XOR*: Exclusive OR encoding is a simple form of encryption that uses the XOR operation between a data stream and a key to transform data. XOR encoding is symmetric meaning the same operation is used for both encoding and decoding. 
+ * *UUEncode*: A binary-to-text encoding scheme primarily used in Unix systems for converting binary data into ASCII characters. It was commonly used for encoding binary files for transmission over E-mail. 
+
+
 
 ---
 
