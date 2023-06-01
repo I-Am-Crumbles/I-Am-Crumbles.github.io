@@ -80,7 +80,7 @@ Common Hahsing Algorithms include:
 
 ---
 
-<ins> **WebGoat Challenges </ins> 
+<ins> **WebGoat Challenges** </ins> 
 
  **Challenge 1** 
 
