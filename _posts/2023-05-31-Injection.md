@@ -7,7 +7,7 @@ This is post eight of a series where I will be doing WebGoats challenges to furt
 
 ---
 
-<ins> **\#4. Injection** </ins>
+<ins> **\#3. Injection** </ins>
 
 Injection attacks happen when untrusted data is sent to a code interpreter through a form input or some other data submission. For example An attacker could enter SQL database code into a form that expects a plaintext username. If that form input is not properly secured this would result in that SQL code being executed. 
 
