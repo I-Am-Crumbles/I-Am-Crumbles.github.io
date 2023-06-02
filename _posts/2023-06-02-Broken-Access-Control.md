@@ -130,8 +130,77 @@ Completing the challenge gives me a hint that I'll need one of the links for the
 
 ![Complete1](/docs/assets/images/webgoat/bac/broken21.png)
 
+**Challenge 2** 
 
+*Try It - Gathering User Info* 
 
+![Challenge2](/docs/assets/images/webgoat/bac/broken22.png)
+
+If I navigate over to the link I found earlier at `WebGoat/access-control/users` I receive and error that the class path resource, `webgoat/templates/list_users.html`,  to the users list is missing. 
+
+![error](/docs/assets/images/webgoat/bac/broken23.png)
+
+The hint says that the assignment involves one simple change to the *GET* request. So I load that up in burp to see what it looks like and send it to the *repeater* for testing. 
+
+![burp](/docs/assets/images/webgoat/bac/broken24.png)
+
+After examining the *request* and the *response* headers and some trial and error I realized the *content-type* is missing from my request, it defaults to `text/html` in the *response*, but that doesn't work if I add it to the request. I do know from other WebGoat challenges that it often expects the `application/json` content type. Adding `Content-Type: application/json; charset=UTF-8` to the request generates a response with the users password hashes. 
+
+![request edit](/docs/assets/images/webgoat/bac/broken25.png)
+
+The one I need for the challenge being Jerry's `SVtOlaa+ER+w2eoIIVE5/77umvhcsh5V8UyDLUa1Itg=`. 
+
+![Complete](/docs/assets/images/webgoat/bac/broken26.png)
+
+---
+
+<ins> **WebGoat Challenges – Authentication Spoofing** </ins>
+
+**Challenge 1** 
+
+*Spoofing an Authentication Cookie* 
+
+![Challenge1](/docs/assets/images/webgoat/bac/broken27.png)
+
+I start the challenge by logging in with the provided credentials to see what happens. In both cases I'm provided with a cookie that is `base64` encoded. 
+
+`webgoat 
+NGY0MTUyNDU2MTc3NTY0YTQ5NTM3NDYxNmY2NzYyNjU3Nw==` 
+
+![webgoat logon](/docs/assets/images/webgoat/bac/broken28.png)
+
+`Admin 
+NGY0MTUyNDU2MTc3NTY0YTQ5NTM2ZTY5NmQ2NDYx` 
+
+![admin logon](/docs/assets/images/webgoat/bac/broken29.png)
+
+If I try to decode the cookie in the terminal using base64 the output I get is displayed in hexadecimal. If I further decode it I get a plaintext string that ends with webgoat in reverse `OAREawVJIStaogbew` 
+
+![decode](/docs/assets/images/webgoat/bac/broken30.png)
+
+Since I know the encoding scheme now the decoding of the admin cookie can be done in one line. 
+
+`echo "NGY0MTUyNDU2MTc3NTY0YTQ5NTM2ZTY5NmQ2NDYx" | base64 -d | xxd -r -p` 
+
+The results at the same string except the end is the word *admin* reversed `OAREawVJISnimda`. 
+
+![decode2](/docs/assets/images/webgoat/bac/broken31.png)
+
+With this the cookie for user tom should be pretty easy to spoof. I'll just take the first part of the string `OAREawVJIS` and add `mot` or tom in reverse to the end of it `OAREawVJISmot`. Then I'll encode that string with a command that follows the opposite of my decoding scheme.  
+
+The use of tools in the terminal seemed to generate incorrect results, so I used online encoders for this part. I first convert my text into a *hexadecimal* value, then I take that value, remove the spaces, and convert to base64. 
+
+![encode](/docs/assets/images/webgoat/bac/broken32.png)
+
+![encode](/docs/assets/images/webgoat/bac/broken33.png)
+
+I can test this out by sending it through the request in burp suite and seeing if the challenge completes. In the captured request I edit the *Cookie* line in the header to read  
+
+`Cookie: JSESSIONID=ekDuDNUYRPExGQ0Z4z37QyezcL9zotWvbGhbDIxJ; spoof_auth=NEY0MTUyNDU2MTc3NTY0QTQ5NTM2RDZGNzQ=` 
+
+So that it now contains my spoofed cookie for tom. This generates a response that says I completed the challenge once I send it over.
+
+![complete](/docs/assets/images/webgoat/bac/broken34.png)
 
 
 
