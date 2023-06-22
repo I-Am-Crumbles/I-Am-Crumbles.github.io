@@ -34,4 +34,4 @@ Most SQL injection vulnerabilities are within the *WHERE* clause of a *SELECT* q
 
 *WHERE Clause Vulnerability*
 
-![lab1](/docs/assets/images/portswigger/sqli/whatissqli/wsqli01.png)
+![lab1](/docs/assets/images/portswigger/sqli/whatissqli/wsql01.png)
