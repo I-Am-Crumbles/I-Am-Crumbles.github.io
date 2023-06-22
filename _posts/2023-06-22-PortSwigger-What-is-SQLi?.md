@@ -74,7 +74,7 @@ Alternatively the challenge can be solved without *Burp Suite* simply by modifyi
 
 ![lab2](/docs/assets/images/portswigger/sqli/whatissqli/wsql11.png)
 
-For this lab I need to perform a SQLi attack that logs into the administrator user. Since the first account in a database is often an administrative user an SQL query can be exploited to log in as the that first user. Using the payload `' or 1=1 --` will cause the application to perform the query ` SELECT * FROM users WHERE username = ' ' OR 1=1-- ' AND password = 'password' `. The double hyphen ` --` represents a comment sequence and causes the password portion of the query to be ignored resulting in a bypass of the login. 
+For this lab I need to perform a SQLi attack that logs into the administrator user. Since the first account in a database is often an administrative user an SQL query can be exploited to log in as the that first user. Using the payload `' or 1=1 --` will cause the application to perform the query `SELECT * FROM users WHERE username = ' ' OR 1=1-- ' AND password = 'password'`. The double hyphen `--` represents a comment sequence and causes the password portion of the query to be ignored resulting in a bypass of the login. 
 
 ![login](/docs/assets/images/portswigger/sqli/whatissqli/wsql12.png)
 
