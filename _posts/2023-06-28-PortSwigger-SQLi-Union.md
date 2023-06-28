@@ -121,3 +121,46 @@ Modifying the *UNION SELECT* payload replacing the *NULL* value with the *Kf52xt
 *SQLi UNION Attack – Retrieving Data From Other Tables* 
 
 ![lab3](/docs/assets/images/portswigger/sqli/union/union15.png)
+
+For this lab I need to inject a SQL payload that leverages a UNION attack to retrieve all  data in the *username* and *password* columns within the database table called *users* and use that to log in as the *administrator* user. 
+
+This time the vulnerability is found within the "All" search filter. Sending a request for that filter to the repeater and modifying it to contain a payload with the correct database and column names I'm able to retrieve the administrator password. 
+
+`'+UNION+SELECT+username,+password+FROM+users--` 
+
+*admnistrator:12l9bda4h22en8qb6ldv* 
+
+![payload](/docs/assets/images/portswigger/sqli/union/union16.png)
+
+Using that account information to log in solves the challenge. 
+
+![solved](/docs/assets/images/portswigger/sqli/union/union17.png)
+
+---
+
+**Lab 4**
+
+*SQLi UNION Attack - Retrieving Multiple Values In A Single Column* 
+
+![lab4](/docs/assets/images/portswigger/sqli/union/union18.png)
+
+For this lab I will again need to perform an SQL UNION attack to retrieve data from the *username* and *password* columns in the *users* database, except this time I need to concatenate the response values into a single column. 
+
+I'll be using a request for the *Clothing Shoes and Accessories*filter that I sent to the repeater. 
+
+![request](/docs/assets/images/portswigger/sqli/union/union19.png)
+
+`'+UNION+SELECT+username||":"||password+FROM+users--` 
+
+![payload](/docs/assets/images/portswigger/sqli/union/union20.png)
+
+`'+UNION+SELECT+NULL,username||':'||password+FROM+users--` 
+
+![works](/docs/assets/images/portswigger/sqli/union/union21.png)
+
+*administrator:8qcekjih58c2qy724d12* 
+
+![finish](/docs/assets/images/portswigger/sqli/union/union22.png)
+
+
+
