@@ -162,7 +162,7 @@ The previous payload failed because the column that returns string data is the s
 
 ![works](/docs/assets/images/portswigger/sqli/union/union21.png)
 
-Logging in with the account information *administrator:8qcekjih58c2qy724d12* completes the challenges.
+Logging in with the account information *administrator:8qcekjih58c2qy724d12* completes the last challenge for this section.
 
 ![finish](/docs/assets/images/portswigger/sqli/union/union22.png)
 
