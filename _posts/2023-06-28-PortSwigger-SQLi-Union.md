@@ -152,13 +152,17 @@ I'll be using a request for the *Clothing Shoes and Accessories*filter that I se
 
 `'+UNION+SELECT+username||":"||password+FROM+users--` 
 
+This payload attempts to extract the data from the *username* and *password* columns in the *users* database and concatenate them together separated by a colon symbol `:`. It didn't work though.
+
 ![payload](/docs/assets/images/portswigger/sqli/union/union20.png)
+
+The previous payload failed because the column that returns string data is the second column, modifying the payload so that a *NULL* value represents the first column will cause the database to return the usernames and passwords in the response as I intended previously.
 
 `'+UNION+SELECT+NULL,username||':'||password+FROM+users--` 
 
 ![works](/docs/assets/images/portswigger/sqli/union/union21.png)
 
-*administrator:8qcekjih58c2qy724d12* 
+Logging in with the account information *administrator:8qcekjih58c2qy724d12* completes the challenges.
 
 ![finish](/docs/assets/images/portswigger/sqli/union/union22.png)
 
