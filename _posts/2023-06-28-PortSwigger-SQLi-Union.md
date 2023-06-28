@@ -63,3 +63,61 @@ This uses the double pipe sequence which is a string concatenation operator for 
 *SQLi UNION Attack - Determining The Number of Columns Returned By the Query*
 
 ![lab1](/docs/assets/images/portswigger/sqli/union/union01.png)
+
+To start the challenge off I load up the web page in the lab and then capture a request to filter the products by the *accessories category* and send that to the repeater.  
+
+![Accessories](/docs/assets/images/portswigger/sqli/union/union02.png)
+
+![Request](/docs/assets/images/portswigger/sqli/union/union03.png)
+
+If I edit the category parameter to include a UNION SELECT payload with plus signs to represent URL encoded spaces I can see that the response now displays an error. 
+
+`'+UNION+SELECT+NULL--` 
+
+![error](/docs/assets/images/portswigger/sqli/union/union04.png)
+
+The payload continues to generate an error until it's modified to contain three *NULL* values in the parameter. 
+
+![NULL NULL NULL](/docs/assets/images/portswigger/sqli/union/union05.png)
+
+This leads me to believe the number of columns returned by the query to be three. This can also be tested with the `'+ORDER+BY+1` payload and incrementing the numerical value each time. The order of the items returned in the response changes all the way until `'+ORDER+BY+4` where it errors. 
+
+![order by 1](/docs/assets/images/portswigger/sqli/union/union06.png)
+
+![order by 2](/docs/assets/images/portswigger/sqli/union/union07.png)
+
+![order by 3](/docs/assets/images/portswigger/sqli/union/union08.png)
+
+![order by 4](/docs/assets/images/portswigger/sqli/union/union09.png)
+
+Lab 1 was completed during the testing when I sent the `'+UNION+SELECT+NULL,NULL,NULL--` payload.
+
+![finish](/docs/assets/images/portswigger/sqli/union/union10.png)
+
+---
+
+**Lab 2**
+
+*SQLi UNION Attack- Finding A Column Containing Text* 
+
+![lab2](/docs/assets/images/portswigger/sqli/union/union11.png)
+
+For this lab I need to use the information learned in the previous lab to make a specific value, "Kf52xt", appear within the query results. 
+
+![string value](/docs/assets/images/portswigger/sqli/union/union12.png)
+
+Modifying the *UNION SELECT* payload replacing the *NULL* value with the *Kf52xt* string each time I'm able to manually test the SQLi in the repeater until it returns the string as part of the table in the response. In this case replacing the second column completes the challenge. 
+
+`'+UNION+SELECT+NULL,'Kf52xt',NULL--`  
+
+![request](/docs/assets/images/portswigger/sqli/union/union13.png)
+
+![solved](/docs/assets/images/portswigger/sqli/union/union14.png)
+
+---
+
+**Lab 3**
+
+*SQLi UNION Attack – Retrieving Data From Other Tables* 
+
+![lab3](/docs/assets/images/portswigger/sqli/union/union15.png)
