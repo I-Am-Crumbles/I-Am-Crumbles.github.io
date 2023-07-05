@@ -34,6 +34,7 @@ Modifying the query so that the conditional statement evaluates as false shows t
 `TrackingId=h8AgqRGdim2PuewB' AND '1'='2` 
 
 ![modify 2](/docs/assets/images/portswigger/sqli/blindsqli/conditionalresponses/cr06.png)
+
 ![nothing](/docs/assets/images/portswigger/sqli/blindsqli/conditionalresponses/cr07.png)
 
 Next I can confirm that there is a tabled called *users* with the following payload. 
