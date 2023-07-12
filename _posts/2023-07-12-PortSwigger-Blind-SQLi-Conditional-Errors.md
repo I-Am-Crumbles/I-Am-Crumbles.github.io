@@ -27,7 +27,7 @@ By modifying the *TrackingId* to contain a single quote at the end I can see the
 
 Then when I close the quote I no longer generate an error in the applications response. This implies that a syntax error has a detectable response on the web application. 
 
-``TrackingId=KpIKTMjfiYuz8jQP''` 
+`TrackingId=KpIKTMjfiYuz8jQP''` 
 
 ![normal response](/docs/assets/images/portswigger/sqli/blindsqli/conditionalerrors/ce04.png)
 
@@ -57,7 +57,7 @@ Now that I know what kind of database the web application is likely using as lon
 
 I can modify the query to confirm that the *users* table exists by changing the table name and adding a condition, `WHERE ROWNUM = 1` , to prevent the query from returning more than one row and breaking the concatenation. 
 
-`TrackingId=KpIKTMjfiYuz8jQP'||(SELECT '' FROM users WHERE ROWNUM = 1)||' 
+`TrackingId=KpIKTMjfiYuz8jQP'||(SELECT '' FROM users WHERE ROWNUM = 1)||' `
 
 Since the application responds without an error the table probably exists. 
 
@@ -105,7 +105,7 @@ Reducing the character length by 1 to `19` generates the error again inferring t
 
 ![greater than 19](/docs/assets/images/portswigger/sqli/blindsqli/conditionalerrors/ce14.png)
 
-`TrackingId=45o4t4APu4sxjqmv'||(SELECT CASE WHEN LENGTH(password)=20 THEN to_char(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+`TrackingId=45o4t4APu4sxjqmv'||(SELECT CASE WHEN LENGTH(password)=20 THEN to_char(1/0) ELSE '' END FROM users WHERE username='administrator')||'`
 
 ![equals 20](/docs/assets/images/portswigger/sqli/blindsqli/conditionalerrors/ce15.png)
 
@@ -147,6 +147,6 @@ And so on...
 
 Continuing this process through all 20 character positions I am eventually able to determine *administrator* users *password* `nzghq30kgg1kv3t4yebv` 
 
-Logging in with the credentials *admnistrator:nzghq30kgg1kv3t4yebv` completes the lab. 
+Logging in with the credentials *admnistrator:nzghq30kgg1kv3t4yebv* completes the lab. 
 
 ![Finish](/docs/assets/images/portswigger/sqli/blindsqli/conditionalerrors/ce21.png)
