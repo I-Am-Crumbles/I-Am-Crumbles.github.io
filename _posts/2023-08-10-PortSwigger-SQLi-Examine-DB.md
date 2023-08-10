@@ -105,3 +105,105 @@ The web applications response then displays the version information, `8.0.33-0ub
 ![solved2](/docs/assets/images/portswigger/sqli/examinedb/examinedb11.png)
 
 ---
+
+*SQL Injection Attack, Listing The Database Contents On Non-Oracle Databases* 
+
+![lab3](/docs/assets/images/portswigger/sqli/examinedb/examinedb12.png)
+
+For this quest I'm going to send the request to the *repeater* as I'll likely need to send several queries to solve the challenge. 
+
+![Pets Request](/docs/assets/images/portswigger/sqli/examinedb/examinedb13.png)
+
+Since I know from the challenge title that this is a non-Oracle database I will attempt to modify the *Category* parameter to query the `information_schema.tables` view. I know from the challenge description I'll be using a `UNION` attack and the previous labs would lead me to believe the database still has two columns which I will represent with `table_name` and `NULL`. Since this is also a *GET* request I'll need to again url encode my query. 
+
+`Pets'+UNION+SELECT+table_name,+NULL+FROM+information_schema.tables--` 
+
+![information schema tables](/docs/assets/images/portswigger/sqli/examinedb/examinedb14.png)
+
+This query returns many, many tables in the response.  
+
+![tables1](/docs/assets/images/portswigger/sqli/examinedb/examinedb15.png)
+
+![tables2](/docs/assets/images/portswigger/sqli/examinedb/examinedb16.png)
+
+![tables3](/docs/assets/images/portswigger/sqli/examinedb/examinedb17.png)
+
+Within those results is a table called `users_gbcwql` which likely contains data on all the user credentials. 
+
+![users table](/docs/assets/images/portswigger/sqli/examinedb/examinedb18.png)
+
+With the table name I can now query the `information_schema.columns` view `WHERE` the `table_name='users_gbcwql`.  
+
+`'+UNION+SELECT+column_name,+NULL+FROM+information_schema.columns+WHERE+table_name='users_gbcwql'--` 
+
+This query results in 2 column names: 
+
+`password_ixmxrm` 
+
+`username_xcjdpi` 
+
+![column names](/docs/assets/images/portswigger/sqli/examinedb/examinedb19.png)
+
+With the column names I simply need to query them `FROM` the `users_gbcwql` table. 
+
+`'+UNION+SELECT+username_xcjdpi,+password_ixmxrm+FROM+users_gbcwql--` 
+
+This query returns several passwords including the one for user `administrator:i7i0f48ss6jyd28mb5j7` 
+
+![admin creds](/docs/assets/images/portswigger/sqli/examinedb/examinedb20.png)
+
+logging in with the credentials `administrator:i7i0f48ss6jyd28mb5j7` completes the challenge 
+
+![solved3](/docs/assets/images/portswigger/sqli/examinedb/examinedb21.png)
+
+---
+
+*SQL Injection Attack, Listing The Database Contents On Oracle* 
+
+![lab3](/docs/assets/images/portswigger/sqli/examinedb/examinedb22.png)
+
+Just like the previous lab I'll need to capture a request to query a *product category* and use the *repeater* to modify the query to display a list of tables, but first since I know this is an Oracle database and I'll be using a `UNION` attack I can confirm the number of columns with the following payload: 
+
+`Gifts'+UNION+SELECT+'abc','def'+FROM+dual--` 
+
+![column number query](/docs/assets/images/portswigger/sqli/examinedb/examinedb23.png)
+
+![column number response](/docs/assets/images/portswigger/sqli/examinedb/examinedb24.png)
+
+Now that I've confirmed I'm again working with two columns I can write a query that will retrieve a list of tables in the database use syntax related to Oracle 
+
+`Gifts'+UNION+SELECT+table_name,NULL+FROM+all_tables--` 
+
+Much like the last lab this displays many tables.
+
+![many tables](/docs/assets/images/portswigger/sqli/examinedb/examinedb25.png)
+
+The one I'm looking for is the `USERS_OERPCY` table. 
+
+![users table](/docs/assets/images/portswigger/sqli/examinedb/examinedb26.png)
+
+Now I can query the `all_tab_columns` `WHERE table_name='USERS_OERPCY` view using *Oracle* database syntax and get a list of the column names in the users table. 
+
+`Gifts'+UNION+SELECT+column_name,NULL+FROM+all_tab_columns+WHERE+table_name='USERS_OERPCY'--`
+
+I can see in the response two of the column names are: 
+
+`PASSWORD_RALSWA` 
+
+`USERNAME_CRGLBU` 
+
+![column names](/docs/assets/images/portswigger/sqli/examinedb/examinedb27.png)
+
+With this information I can query the usernames and passwords from the users table
+
+`'+UNION+SELECT+USERNAME_CRGLBU,+PASSWORD_RALSWA+FROM+USERS_OERPCY--` 
+
+Again this displays all of the usernames and passwords in the table but for the purposes of this challenge the one I'm interested in is `admnistrator:566ghyl96kel7ze0roy3`. 
+
+![admin creds](/docs/assets/images/portswigger/sqli/examinedb/examinedb28.png)
+
+Logging in with the found credentials solves the challenge for this lab. 
+
+![solved4](/docs/assets/images/portswigger/sqli/examinedb/examinedb29.png)
+
+
