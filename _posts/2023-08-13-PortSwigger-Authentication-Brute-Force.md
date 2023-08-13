@@ -107,7 +107,7 @@ Logging in with the credentials `auth:baseball` completes the challenge for this
 
 To start this off I captured a request to login using the provided credentials and sent it to the *repeater*, noting that the response time was `133 milli seconds`.
 
-![wiener login](/docs/assets/images/portswigger/authentication/bruteforce/bf223.png)
+![wiener login](/docs/assets/images/portswigger/authentication/bruteforce/bf23.png)
 
 I then tried to login with a username I made up that I know does not exist in the system and the application took slightly longer to respond but it wasn't significant enough to go off of at `143 mill seconds`.  
 
