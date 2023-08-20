@@ -144,13 +144,40 @@ Then I select OK, the next window that pops up gives me the option to test my ma
 
 With the macro created I need to tell Burp to use it. Above where I created the macro there is a section called *Session handling rules*. Clicking add allows me to create a new rule, within the new window that pops up there is a *Rule actions* section, which I can add from a list of preset actions. In this case the one I'm looking for is called *Run a macro*.  
 
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa35.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa36.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa37.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa38.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa39.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa40.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa41.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa42.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa43.png)
-![lab3](/docs/assets/images/portswigger/authentication/2fa/2fa44.png)
+![session handling rules](/docs/assets/images/portswigger/authentication/2fa/2fa35.png)
+
+This will bring up another window allowing me to select the macro I created earlier, edit it, or add a new one. With the macro I want to run selected I just need to hit *OK* at the bottom. 
+
+![select macro to run](/docs/assets/images/portswigger/authentication/2fa/2fa36.png)
+
+Back in the *Details* window from earlier I also need to select the *Scope* tab and make sure that the option to *Include all URLs* is selected in the *URL scope* section. 
+
+![include all urls](/docs/assets/images/portswigger/authentication/2fa/2fa37.png)
+
+With the macro set up I need to select a valid *POST* request to the */login2* sub directory and send it to the *Intruder*.  
+
+![send to intruder](/docs/assets/images/portswigger/authentication/2fa/2fa38.png)
+
+Within the *Intruder* I need to set the *Attack type* to *Sniper* and add the *section signs* indicating the payload position around the value of the *mfa-code* parameter.  
+
+![payload position](/docs/assets/images/portswigger/authentication/2fa/2fa39.png)
+
+Within the *Payloads* tab I need to edit the *Payload set* so that it is a *Numbers* Payload type and then set the number range *From: 0 To: 9999* to cover all possible number combinations. I also need to set the *Min and Max integer digits* to *4* since it's a 4 digit code
+
+![payload set](/docs/assets/images/portswigger/authentication/2fa/2fa40.png)
+
+Since the attack is a macro of 3 requests and 1 request from the intruder each stage of the attack is essentially 4 requests in a row. With that in mind I also need to create a new resource pool with a *Maximum concurrent requests* of *1* so that nothing gets out of order. 
+
+![resource pool](/docs/assets/images/portswigger/authentication/2fa/2fa41.png)
+
+Upon running the attack for the first time it finished without me ever receiving a 302 response indicating that one of the 4-digit codes worked. However the note within the challenge did state the attack may need to be run a few times since the code may regenerate in the middle of it to a number that has already been tested.  
+
+![failed](/docs/assets/images/portswigger/authentication/2fa/2fa42.png)
+
+The attack took a little over 2 hours per try but on the 3rd try the code generated was a relatively low number and I was able to capture the 302 response. 
+
+![302 response](/docs/assets/images/portswigger/authentication/2fa/2fa43.png)
+
+From there I just needed to right click the response and select *Show in browser*. This generates a link that when paste into the browser brings up the *My Account* page for user *carlos* and solves the challenge. 
+
+![solved](/docs/assets/images/portswigger/authentication/2fa/2fa44.png)
