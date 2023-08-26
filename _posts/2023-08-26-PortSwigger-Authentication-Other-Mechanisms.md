@@ -164,7 +164,7 @@ Now that I have their credentials I just need to log into and delete the account
 
 Once the account is deleted the challenge is marked as *solved* on the webpage completing this lab. 
 
-![solved](/docs/assets/images/portswigger/authentication/othermechanisms/oam35.png)
+![solved2](/docs/assets/images/portswigger/authentication/othermechanisms/oam35.png)
 
 
 ---
@@ -173,8 +173,113 @@ Once the account is deleted the challenge is marked as *solved* on the webpage c
 
 ![lab3](/docs/assets/images/portswigger/authentication/othermechanisms/oam36.png)
 
+Once I access this lab I noticed that login page now has a *forgot password* link. Clicking it brings me to a new page which allows me to enter a username. Entering the username assigned to me by the lab, *wiener* has an email with a password reset link forwarded to the *email* client at the top of the page. 
+
+![forgot password](/docs/assets/images/portswigger/authentication/othermechanisms/oam37.png)
+
+![enter wiener](/docs/assets/images/portswigger/authentication/othermechanisms/oam38.png)
+
+![email client](/docs/assets/images/portswigger/authentication/othermechanisms/oam39.png)
+
+Following that link brings up a password reset page. I enter a new password and send the request off. I then go and locate it in Burp. 
+
+![request](/docs/assets/images/portswigger/authentication/othermechanisms/oam40.png)
+
+I can see that whichever user is receiving the password reset is included as a value within the request `username=wiener`. I decided to forward this request to the repeater and change the value to `carlos`. Forwarding the request to web application returns a *302 response code* indicating that the password for user *carlos* should have been changed to my input value of `peter1`. 
+
+![change to carlos](/docs/assets/images/portswigger/authentication/othermechanisms/oam41.png)
+
+I can verify this by using the credentials *carlos:peter1* to login on the web application, which also completes the challenge for this lab. 
+
+![solved3](/docs/assets/images/portswigger/authentication/othermechanisms/oam42.png)
 
 
+---
 
+*Password Reset Poisoning Via Middleware*
+
+![lab4](/docs/assets/images/portswigger/authentication/othermechanisms/oam43.png)
+
+Password reset poisoning can occur when a website relies on header values to direct traffic or craft page links. If left unchecked an attacker can inject their own values and modify the intended behavior of the application. For this challenge I need to retrieve a password reset request for the valid user that's provided and test it against comm Override Headers, `X-Forwarded-Host`, `X-Forwarded-Server`, `X-HTTP-Host-Override`, and `X-Host`, that can sometimes work to replace the *Host* header value. This will be a *POST* request to `/forgot-password`. 
+
+![request to forgot password](/docs/assets/images/portswigger/authentication/othermechanisms/oam44.png)
+
+Since the request will accept the *X-Forwarded-Host* header I can use that to send the request for a password reset to my version of the *exploit server* and retrieve it from the *access log*. 
+
+`X-Forwarded-Host: exploit-0a36000204b184a58186e229013e0096.exploit-server.net` 
+
+I also need to change the *Username* to `carlos`. 
+
+![edit request](/docs/assets/images/portswigger/authentication/othermechanisms/oam45.png)
+
+The request received a 200 response code. Navigating over to the access log I am able to find a *GET* request to */forgot-password* that contains the temporary password reset token for user *carlos*, `temp-forgot-password-token=9kdk4skfp4zz025sbveitb6qvkp53c0p`. 
+
+![access log](/docs/assets/images/portswigger/authentication/othermechanisms/oam46.png)
+
+![token](/docs/assets/images/portswigger/authentication/othermechanisms/oam47.png)
+
+Now I just generate a fresh password request be sent to the email I have access to through user *wiener* and replace the cookie in the URL with the one that I was able to steal in the previous step.
+
+![fresh reset link](/docs/assets/images/portswigger/authentication/othermechanisms/oam48.png)
+
+`https://0a9b002904b5847781d5e35000c60024.web-security-academy.net/forgot-password?temp-forgot-password-token=9kdk4skfp4zz025sbveitb6qvkp53c0p` 
+
+Now I just paste that URL into the web browser and it will take me to the password reset page where I can enter a new password for user *carlos*. This can be observed in the request where the password token matches the one that was stolen, and the new password has been entered twice. 
+
+![request carlos change](/docs/assets/images/portswigger/authentication/othermechanisms/oam49.png)
+
+Now I just log in as the user with the new credentials `carlos:crumbles` and the lab is marked as solved. 
+
+![solved4](/docs/assets/images/portswigger/authentication/othermechanisms/oam50.png)
+
+---
+
+*Password Brute-Force Via Password Change*
+
+![lab5](/docs/assets/images/portswigger/authentication/othermechanisms/oam51.png)
+
+To start this lab off I log in with the provided credentials and test the password change function to see how it reacts to different situations. The password reset page requires me to enter 3 pieces of information, the *current password* for the user and the *new password* I'd like twice. First I reset the password successfully. This allows me to observe that the page delivers a *Password Changed Successfully!* message if everything is done right  
+
+![change password](/docs/assets/images/portswigger/authentication/othermechanisms/oam52.png)
+
+![successful change](/docs/assets/images/portswigger/authentication/othermechanisms/oam53.png)
+
+I tried to confirm the password change by entering the original password provided, it worked but I learned that the web application will quickly lock me out if I make too many attempts to log in too quickly. 
+
+![lockout](/docs/assets/images/portswigger/authentication/othermechanisms/oam54.png)
+
+For my next test I submitted the correct password with 2 new passwords that did not match `crumbles1` and `crumbles12`. In doing so I see that if a correct password but 2 miss matched new password values is submitted the error message will read "New passwords do not match". 
+
+![new passwords do not match](/docs/assets/images/portswigger/authentication/othermechanisms/oam55.png)
+
+If I enter the wrong password but the new passwords match the web application simply redirects me to the login page. 
+
+![login redirect](/docs/assets/images/portswigger/authentication/othermechanisms/oam56.png)
+
+Finally if I enter a wrong password, `crumbles123` and 2 miss matched new passwords `crumbles1` and `crumbles2` I receive a *Current password is incorrect* error message.  
+
+![current password incorrect](/docs/assets/images/portswigger/authentication/othermechanisms/oam57.png)
+
+This means that I can set up the intruder so that it runs a brute force attack on the *current-password* parameter as long as the 2 *new-password* parameters are miss matched. I can then grep the attack results for the expression "New passwords do not match" and that payload should indicate the correct password. All other payloads should return "Current password is incorrect" 
+
+I need to generate a fresh *POST* request to `/my-account/change-password` and send that to the intruder. Within the positions tab I need to change the *username* value to `carlos` and wrap my payload position markers around the *curent-password* value `crumbles`. 
+
+![intruder](/docs/assets/images/portswigger/authentication/othermechanisms/oam58.png)
+
+In the payloads tab I need one payload set for a simple list, then I just paste the provided list into the *Payload settings*.  
+
+![set payload](/docs/assets/images/portswigger/authentication/othermechanisms/oam59.png)
+
+In the actual *Settings* tab up the top I also set up a *Grep-Match* for the expression `New passwords do not match`. Which my testing earlier concluded would indicate that whatever payload in the *current-password* field is the users current password. 
+
+![grep match](/docs/assets/images/portswigger/authentication/othermechanisms/oam60.png)
+
+Then I just run the attack and when it finished I sort the results by the expression I added. Only one request generated that response indicating that the password is *pepper*.
+
+![pepper](/docs/assets/images/portswigger/authentication/othermechanisms/oam61.png)
+
+Logging in with the credentials `carlos:pepper` completes the challenge for this lab. 
+
+![solved5](/docs/assets/images/portswigger/authentication/othermechanisms/oam62.png)
 
 
