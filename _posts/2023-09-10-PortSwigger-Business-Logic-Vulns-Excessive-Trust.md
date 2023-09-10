@@ -40,65 +40,69 @@ I then just need to refresh the page with the users cart to see the results.
 
 ![total $1](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv05.png)
 
+![lab1 solved](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv06.png)
+
 Clicking on place order will purchase the jacket with $1.00 of the users available store credit and complete the challenge for this lab. 
 
-![lab1 solved](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv06.png)
+![lab1 solved](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv07.png)
+
+
 
 ---
 
 *High-Level Logic Vulnerability*
 
-![lab2 intro](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv07.png)
+![lab2 intro](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv08.png)
 
 I'll start this lab off by logging in with the provided credentials and I can see that I again have $100 of store credit.  
 
-![login wiener](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv08.png)
+![login wiener](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv09.png)
 
 From there I'll navigate to the `l33t Leather Jacket` product page and add one to my cart. 
 
-![add to cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv09.png)
+![add to cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv10.png)
 
 I can observe from the request that I have the ability to manipulate the quantity of the product that's being added to the cart. 
 
-![cart post request](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv10.png)
+![cart post request](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv11.png)
 
 Since I know I want to actually buy a leather jacket to satisfy the challenge for this lab I will go to a second item in the listing and capture a request to add that to the cart and send it to the repeater. 
 
-![second item to cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv11.png)
+![second item to cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv12.png)
 
-![second item repeater](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv12.png)
+![second item repeater](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv13.png)
 
 Then to verify that I have the ability to manipulate the quantity I increased it to `3` and forwarded the request. I can see that it worked by refreshing the cart in the web browser and seeing there are now `5` items in it, the 3 I just added and the 2 from before. 
 
-![forward repeater](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv13.png)
+![forward repeater](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv14.png)
 
-![updated cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv14.png)
+![updated cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv15.png)
 
 I can also manipulate the quantity so that it adds a negative amount of an item to the cart, by entering a quantity of `-5` and forwarding the request I can observe that the cart now has `1 l33t leather jacket` and `-1 real life photoshopping`. 
 
-![repeater](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv15.png)
+![repeater](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv16.png)
 
-![cheaper cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv16.png)
+![cheaper cart](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv17.png)
 
 I can also see that the current total `$1316.90` is $20.10 less than the original price of the jacket.  
 
 If I further edit the request in the repeater to an extreme number like `-1000` I can observe that the cart total actually goes into a negative value. 
 
-![request](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv17.png)
+![request](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv18.png)
 
-![updated cart again](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv18.png)
+![updated cart again](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv19.png)
 
 I can now attempt to place the order but the cart will generate an error `Cart total price cannot be less than zero`. This isn't really a problem though since I have $100 of store credit, so any positive total under $100 should work. 
 
-![cart error](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv19.png)
+![cart error](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv20.png)
 
 A quantity of `-64` will result in the cart having a total of `$50.60` which is cheap enough to purchase with my store credit.  
 
-![cart in range](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv20.png)
+![cart in range](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv21.png)
 
 Placing the order marks the lab as solved. 
 
-![lab2 solved](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv21.png)
+![lab2 solved](/docs/assets/images/portswigger/businesslogicvulns/excessivetrust/blv22.png)
 
 ---
 
