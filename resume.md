@@ -52,7 +52,8 @@ on various engaging projects. The topics encompass a diverse range of technical 
 
 <ins> **Professional Experience:** </ins>
 
-**Synack Inc.**
+**Synack Inc.                                                                                                                                 August 2023 - Present**
+
 *Security Analyst Intern*
 
 **Primary Responsibilities:**
@@ -69,7 +70,8 @@ on various engaging projects. The topics encompass a diverse range of technical 
 
 ---
 
-**Fullstack Academy November 2022 - May 2023**
+**Fullstack Academy                                                                                                                          November 2022 - May 2023**
+
 *Cybersecurity Mentor*
 
 * Created a positive, professional, and inclusive learning environment for adult learners, leveraging tech tools and instructional best practices to help students connect content to the real world
