@@ -44,6 +44,7 @@ Metasploit, Wireshark, Burp Suite, Nessus, and Splunk.
 My unique and comprehensive personal project portfolio, where I showcase an array of in-depth write-ups
 on various engaging projects. The topics encompass a diverse range of technical subjects such as:
 
+* Web application vulnerability assessment
 * Penetrating vulnerable systems and researching their weaknesses
 * Crafting Python scripts for automating tasks and enhancing productivity
 * Designing and implementing home lab setups for hands-on learning experiences
@@ -51,8 +52,25 @@ on various engaging projects. The topics encompass a diverse range of technical 
 
 <ins> **Professional Experience:** </ins>
 
-Fullstack Academy November 2022 - May 2023
-Cybersecurity Mentor
+**Synack Inc.**
+*Security Analyst Intern*
+
+**Primary Responsibilities:**
+
+* Collaborate with the Vulnerability Operations team on the review and acceptance of various low-complexity vulnerability reports.
+* Work closely with senior analysts to understand advanced vulnerability assessment methodologies.
+* Communicate effectively with cross-functional teams to help ensure accurate reporting and resolution of vulnerabilities.
+
+**Secondary Responsibilities:**
+
+* Engage in structured learning and training to enhance skills in reviewing and validating high-complexity vulnerability reports.
+* Gain proficiency in the use of penetration testing techniques and tools to validate vulnerabilities through exploitation.
+* Assist in the triage, analysis, and validation of identified vulnerabilities.
+
+---
+
+**Fullstack Academy November 2022 - May 2023**
+*Cybersecurity Mentor*
 
 * Created a positive, professional, and inclusive learning environment for adult learners, leveraging tech tools and instructional best practices to help students connect content to the real world
 
