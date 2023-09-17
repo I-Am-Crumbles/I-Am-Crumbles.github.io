@@ -31,7 +31,7 @@ Metasploit, Wireshark, Burp Suite, Nessus, and Splunk.
 
 <ins>**Education and Certifications:** </ins>
 
-* [eLearnSecurity Junior Penetration Tester](https://my.ine.com/certificate/9009cbd0-ee12-482b-8eff-4dec14a74bdd) August 2023 
+* [eLearnSecurity Junior Penetration Tester](https://drive.google.com/file/d/16Ov_ie0hru6pSnCkNC3qBgQXHaxtEa4E/view) August 2023 
 * [CompTIA Security+](https://drive.google.com/file/d/1CjmY6Xq3lYi-E_fNmFOvElqVXXoVaCqX/view?usp=sharing) September 2022 - 2025
 * [University Of Illinois Chicago Cybersecurity Bootcamp](https://drive.google.com/file/d/1yWiwe33rkFMimqQAnx4pAumbsDGjD5dJ/view?usp=share_link) June 2022
   Powered by Fullstack Academy
