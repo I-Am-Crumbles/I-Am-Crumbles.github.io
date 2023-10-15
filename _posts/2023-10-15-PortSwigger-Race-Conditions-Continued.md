@@ -104,4 +104,88 @@ If I navigate over to that `Admin panel` I have the option to `delete carlos` an
 
 ![lab1 solved](/docs/assets/images/portswigger/raceconditionscontinued/rcc19.png)
 
+---
+
+*Exploring Time-Sensitive Vulnerabilities* 
+
+![lab2 intro](/docs/assets/images/portswigger/raceconditionscontinued/rcc20.png)
+
+To start this lab off I inspected the `forgot password` feature so that I could see how sever processes a password reset request. 
+
+![forgot password](/docs/assets/images/portswigger/raceconditionscontinued/rcc21.png)
+
+Once I initiate the password reset request I'm redirected to a page asking me to enter my username or email, which I can grab in the email client, `wiener@exploit-0aa3002a048cbfdd84ef468601360076.exploit-server.net`. 
+
+![enter email](/docs/assets/images/portswigger/raceconditionscontinued/rcc22.png)
+
+![locate the email](/docs/assets/images/portswigger/raceconditionscontinued/rcc23.png)
+
+Once I enter the email I get redirected to a page that tells me a link to verify the password change was sent to my email.  
+
+![please check for reset link](/docs/assets/images/portswigger/raceconditionscontinued/rcc24.png)
+
+I noted that I can see the username `wiener` within the link along with some form of `token`. 
+
+![the email link](/docs/assets/images/portswigger/raceconditionscontinued/rcc25.png)
+
+Within the burp history tab I'll take the `POST /forgot-password` request and send it to the repeater twice and create a group with the 2 tabs. 
+
+![post forgot password](/docs/assets/images/portswigger/raceconditionscontinued/rcc26.png)
+
+![create group](/docs/assets/images/portswigger/raceconditionscontinued/rcc27.png)
+
+When I send these requests in a single packet attack it can be observed that the requests have a significant enough time delay between them that they likely aren't actually being processed by the server at the same time. 
+
+![tab1 time](/docs/assets/images/portswigger/raceconditionscontinued/rcc28.png)
+
+![tab2 time](/docs/assets/images/portswigger/raceconditionscontinued/rcc29.png)
+
+If I navigate over to the inbox in the email client I can observe that the password requests also generated different tokens. Indicating that the token is likely a hash generated from the time stamp. It's also unlikely that user name is part of the hash since it's assigned to its own parameter. This means that it may be possible to generate a link where two usernames are assigned the same token if the requests are sent in close enough time. 
+
+![different tokens](/docs/assets/images/portswigger/raceconditionscontinued/rcc30.png)
+
+It can be observed from the POST request earlier that the server is assigning a `phpsessionid` cookie. This would indicate that the server is use PHP on the backend and is likely only capable of processing one request at a time per session.  
+
+I can circumvent this by making the server generate a new session first within the Burp History tab I need to find the `GET /forgot-password` request and send it to the repeater, but not add it to my current group. 
+
+![GET /forgot password](/docs/assets/images/portswigger/raceconditionscontinued/rcc31.png)
+
+Within the repeater I will want to remove the current value of the `Cookie header` this will force the server to generate a new one for the session when I forward the request and I'll be able to observe it in the response, `phpsessionid=NPRGVmCTGiE1XguvXDOoDlYyP1EsCHqn`. I'll also need to scroll down in the response a little bit and grab the `CSRF` token assigned to the session, `BDxj4D7G10KYlkzKhdeuXZC10H7cPJ3Q`. 
+
+![remove cookie header](/docs/assets/images/portswigger/raceconditionscontinued/rcc32.png)
+
+![grab CSRF token](/docs/assets/images/portswigger/raceconditionscontinued/rcc33.png)
+
+Now still within the repeater I'm going to select one of the two tabs in my group from earlier, in my case it was tab 2 and I will edit the parameters so that they contain the values for my new session. I'm also going to edit the `username` parameter so that it contains a value of the target account `carlos`. 
+
+``` 
+Cookie: phpsessionid=NPRGVmCTGiE1XguvXDOoDlYyP1EsCHqn 
+
+csrf=BDxj4D7G10KYlkzKhdeuXZC10H7cPJ3Q&username=carlos 
+```  
+
+With that I can send the requests in a single packet attack and they will generate at roughly the same time, except one of them will hopefully result in the token being assigned to user `carlos` as well as my primary user, and I can see from the `200` response code that the server processed my requests. 
+
+![edit tab2](/docs/assets/images/portswigger/raceconditionscontinued/rcc34.png)
+
+I can now see within the web browser that this time only 1 additional password link was sent to the email client. This is a good sign as it indicates the server did try to send off a reset link to `carlos`  
+
+![only one reset link](/docs/assets/images/portswigger/raceconditionscontinued/rcc35.png)
+
+Then I just need to copy the reset link and change the value of `user` from `wiener` to `carlos` before I try to navigate to it in the web browser. I had to run the attack a few times but eventually one of the edited links worked and I got through to the password reset page for `carlos`. I went ahead and changed it to `password`. 
+
+![change password](/docs/assets/images/portswigger/raceconditionscontinued/rcc36.png)
+
+I can now login with the username password pair `carlos:password` indicating that the password reset was a success. Once I log in I can see in the web browser that I now have access to an `Admin panel`. 
+
+![burp login](/docs/assets/images/portswigger/raceconditionscontinued/rcc37.png)
+
+![admin panel](/docs/assets/images/portswigger/raceconditionscontinued/rcc38.png)
+
+To solve the lab I just need to navigate over to that `Admin panel` and delete user `carlos`. 
+
+![delete carlos](/docs/assets/images/portswigger/raceconditionscontinued/rcc39.png)
+
+![lab2 solved](/docs/assets/images/portswigger/raceconditionscontinued/rcc40.png)
+
 
