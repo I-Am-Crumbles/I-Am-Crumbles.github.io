@@ -265,7 +265,7 @@ After I forward the request I'm immediately greeted with the response that dumps
 
 ![etc passwd dumped](/docs/assets/images/portswigger/blindxxe/bxxe32.png)
 
-![lab5 solved](/docs/assets/images/portswigger/blindxxe/bxxe34.png)
+![lab5 solved](/docs/assets/images/portswigger/blindxxe/bxxe33.png)
 
 
 
