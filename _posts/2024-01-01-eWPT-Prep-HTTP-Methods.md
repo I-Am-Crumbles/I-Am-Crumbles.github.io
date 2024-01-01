@@ -34,7 +34,7 @@ There is a `/login.php` endpoint that does support POST requests though, this ca
 
 ![Options login](/docs/assets/images/ewpt/labs/httpmethodenum/09.png)
 
-It can also be verified with the credentials provided in the labs description by simply changing the query line to a `POST` request, and adding a line in the request body with the parameters `name=john&password=password`. Forwarding the request to the server returns a `302 Found` response. Indicating we were likely redirected upon successful login. 
+It can also be verified with the credentials provided in the labs description by simply changing the query line to a `POST` request, and adding a line in the request body with the parameters `name=john&password=password`. Forwarding the request to the server returns a `302 Found` response, indicating I was likely redirected upon successful login. 
 
 ![POST login](/docs/assets/images/ewpt/labs/httpmethodenum/10.png)
 
