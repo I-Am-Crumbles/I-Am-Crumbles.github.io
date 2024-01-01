@@ -52,7 +52,22 @@ on various engaging projects. The topics encompass a diverse range of technical 
 
 <ins> **Professional Experience:** </ins>
 
-**Synack Inc.                                                                                                                                 August 2023 - Present**
+**Synack Inc.**
+
+**December 2023 - Present**
+
+*Associate Security Analyst*
+
+* Triage incoming vulnerability reports from Synack Red Team members.
+* Validate vulnerability proof of concepts that range from OWASP Top 10 but not limited to Remote Code Execution, SQL Injection, Access Control, IDORs, Reflected Cross Site Scripting, Persistent Cross Site Scripting, DOM Based Cross Site Scripting, Server Side Request Forgery, Server Side Template Injection, CSRF, and XXE.
+* Monitor the review and acceptance of Synack Red Team missions reports to help ensure accurate reporting and resolution of various low-complexity vulnerabilities.
+* Engage in structured learning and training to enhance skills in reviewing and validating high-complexity vulnerability reports, and to maintain up-to-date knowledge of industry best practices and emerging trends.
+
+---
+
+**Synack Inc.**                                                               
+
+**August 2023 - December 2023**
 
 *Security Analyst Intern*
 
@@ -70,14 +85,13 @@ on various engaging projects. The topics encompass a diverse range of technical 
 
 ---
 
-**Fullstack Academy                                                                                                                          November 2022 - May 2023**
+**Fullstack Academy**
+
+**November 2022 - May 2023**
 
 *Cybersecurity Mentor*
 
 * Created a positive, professional, and inclusive learning environment for adult learners, leveraging tech tools and instructional best practices to help students connect content to the real world
-
 * Maintained accurate records of student progress, provided individualized student support during class sessions, practice exercises, and application activities.
-
 * Promoted student retention and satisfaction by fostering a positive classroom culture and providing constructive, timely feedback on performance in line with course deliverables and rubrics, and implementing action plans to address deficiencies in success metrics. Receiving a mean of 9.5/10 or higher on student satisfaction surveys.
-
 * Served as a role model and ambassador for the company brand, exhibiting professionalism, ethics, and empathy when engaging with staff, students, and the public
