@@ -1,4 +1,4 @@
-## **eWPT Prep labs - HTTP Method Enumeration
+## **eWPT Prep labs - HTTP Method Enumeration**
 
 The goal of this lab is to enumerate the HTTP methods allowed by a by a web application. 
 
