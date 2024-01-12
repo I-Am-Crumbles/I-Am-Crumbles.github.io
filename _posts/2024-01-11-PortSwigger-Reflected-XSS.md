@@ -125,6 +125,138 @@ Once I click on `Store` and then `Deliver exploit to victim` the lab is marked a
 
 ---
 
+*Reflected XSS Into HTML Context With All Tags Blocked Except Custom Ones* 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss26.png)
+
+To start this lab I send a search for my typical canary `crumbles`. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss27.png)
+
+Since there is reflection I sent the request to the Intruder to test for tags. I set the attack types to `sniper` and within the request I replace `crumbles` with some section signs inside of angle brackets to mark my payload. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss28.png)
+
+With the payload position set I next need to copy the tags from portswiggers XSS cheat sheet and then paste them into the payload settings to create my simple list. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss29.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss30.png)
+
+When I run the attack all of the tags that are accepted by the web application will display a 200 status code. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss31.png)
+
+As indicated by the challenges title custom tags are allowed.  
+
+To peform the exploit I will need to store a script into the exploit server that will send the user to the my lab address and search for a custom script named `x`, that uses the `onfocus` event handler to trigger the `alert` that will call the victim users `.document.cookie`.  
+
+``` 
+<script> 
+location = 'https://0a6f001403b4766e83217ac600ef006d.web-security-academy.net/?search=%3Cxss+id%3Dx+onfocus%3Dalert%28document.cookie%29%20tabindex=1%3E#x'; 
+</script> 
+``` 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss32.png)
+
+Once I `Store` the script onto the exploit server I can click `Deliver Exploit to Victim` and my custom link with my exploit will be sent to the servers "victim user" that will click on all links sent to them. Then when the exploit server refreshes the lab will be marked as solved. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss33.png)
+
+---
+
+*Reflected XSS With Event Handlers and `href` Attributes Blocked* 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss34.png)
+
+To start this lab off I search for my usual canary `crumbles` and then within the burp history tab I send the search request to the intruder. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss35.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss36.png)
+
+I want to set up the intruder so that I can test for tags that the server will accept. To start I set the Attack type to `Sniper` and then replace my search term `crumbles` with section signs inside of angle brackets to mark my payload position. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss37.png)
+
+Then I will navigate over to PortSwiggers XSS Cheat sheet and copy all tags. Back in the intruder I navigate over to the `payloads` tab  and select `simple list` for the payload set. Then I can just paste the tags into the Payload settings. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss38.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss39.png)
+
+With the intruder properly set up I can start the attack and see what tags the server accepts by sorting the results by response. I can see that I'm limited to `<a>`, `<animate`>, `<image>`, and `<svg>.  
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss40.png)
+
+I'll start the payload off with `<svg>` as the opening tag, this will allow my payload to be interactive. I'll then set the anchor tag `<a>` to create a hyperlink within my interactive graphic within that anchor tag I will use the SVG element `<animate>` since it is allowed by the server. I will set it's `attributeName` to `href` and give it a `values` of the malicious alert `javascript:alert(1)`. Next will use the `<text>` SVG element to display text within my SVG document that contains the hyperlink. I'll set the text's position on the page with `x` and `y` coordinates and give it a value of `Click me` so it meets the requirements outlined in the challenge. Finally I'll close my open tags and the final product looks something like below: 
+
+`<svg><a><animate attributeName=href values=javascript:alert(1) /><text x=20 y=20>Click me</text></a>` 
+
+Now I just enter my payload into the search bar and once the server processes the request I can see my SVG document `Click me` on display on the web page. The lab was marked as solved but clicking the where it says `Click me` causes the payload to fire. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss41.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss42.png)
+
+---
+
+*Reflected XSS With Some SVG Markup Allowed* 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss43.png)
+
+To start off this lab I search for my usual canary `crumbles`. I went ahead and located the request in the burp history tab and forwarded it to the intruder as well. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss44.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss45.png)
+
+Within the intruder I set the attack type to `Sniper` and replace my canary with the section signs to mark the payload position. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss46.png)
+
+Next I will navigate over to portswiggers XSS cheat sheet and copy all of the tags to the clipboard. I will then paste the tags into the payload settings in the intruder and then run the attack.
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss47.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss48.png)
+
+The results of the attack shows that the `<svg>`, `<image>`, and `<animatetransform>` tags all returned a 200 response from the server and are accepted. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss49.png)
+
+Now I will need to figure out which event tags work. To do this I will head back over to the Payload Positions window and I will adjust my payload a little bit. I'm going to add the `<svg`> tag, and place the payload position markers inside of the tag. Since this is a `GET` request I'll need to URL encode my space as well. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss50.png)
+
+Now I will just navigate over to the XSS cheat sheet and this time copy all of the `events` to my clipboard. I'll also replace my simple list with a new one containing the events. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss51.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss52.png)
+
+I can see from the results that only one event, `onbegin`, is accepted by the server. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss53.png)
+
+Since the lab description and title mention the `<svg>` tag I referenced the XSS cheat sheet for it butthere are unfortunately no payloads for the `onbegin` event within the `<svg>` tag. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss54.png)
+
+However just below my tag selection I can see `svg -> animatetransform` indicating that one of the other tags found in my first run of the intruder can be used in conjunction with `svg`. If I select that one and the `onbegin` event the cheat sheet finds a payload, `<svg><animatetransform onbegin=alert(1) attributeName=transform>`, that I'm able to copy by clicking the button next to it. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss55.png)
+
+Then I just paste the payload into the search bar and the alert fires. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss56.png)
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss57.png)
+
+Since the payload successfully prompted an alert the lab is marked as solved. 
+
+![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss58.png)
+
 
 
 
