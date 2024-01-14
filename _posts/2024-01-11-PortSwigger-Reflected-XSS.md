@@ -35,7 +35,7 @@ To start this lab I will utilize the search function to search for a unique stri
 
 ![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss03.png)
 
-Since my input is just reflected back to me directly on the page and inserted directly into the HTML I can test if I can just insert my own script by searching for a simple payload <script>alert(document.domain)</script>.  
+Since my input is just reflected back to me directly on the page and inserted directly into the HTML I can test if I can just insert my own script by searching for a simple payload `<script>alert(document.domain)</script>`.  
 
 ![lab1 comment](/docs/assets/images/portswigger/xss/reflected1/rxss04.png)
 
