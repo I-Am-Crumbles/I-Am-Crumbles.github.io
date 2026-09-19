@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { sections } from '../../../data/sections';
+import { url } from '../../../data/url';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writeups');
+  return posts.map((post) => {
+    const [area, sub, slug] = post.id.split('/');
+    return { params: { area, sub, slug }, props: { post } };
+  });
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const [area, sub] = post.id.split('/');
+const section = sections.find((s) => s.slug === area)!;
+const subsection = section.subs.find((s) => s.slug === sub)!;
+---
+<Base title={post.data.title}>
+  <p class="crumbs">
+    <a href={url('/')}>Home</a> / <a href={url(`/${area}/`)}>{section.title}</a> / <a href={url(`/${area}/${sub}/`)}>{subsection.title}</a>
+  </p>
+  <article>
+    <h1>{post.data.title}</h1>
+    <p class="crumbs"><time datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time> · Matthew Crum</p>
+    <Content />
+  </article>
+</Base>

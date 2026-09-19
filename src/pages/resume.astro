@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, skillGroups, experience, certifications } from '../data/resume';
+---
+<Base title="Resume">
+  <h1>Resume</h1>
+  <p class="crumbs">
+    {profile.name} · {profile.title} · {profile.location} ·{' '}
+    <a href={`mailto:${profile.email}`}>Email</a> · <a href={profile.linkedin}>LinkedIn</a> · <a href={profile.github}>GitHub</a>
+  </p>
+
+  <section>
+    <h2>Summary</h2>
+    <p>{profile.summary}</p>
+  </section>
+
+  <section>
+    <h2>Technical Skills</h2>
+    <dl class="skills">
+      {skillGroups.map((g) => (<><dt>{g.label}</dt><dd>{g.items}</dd></>))}
+    </dl>
+  </section>
+
+  <section>
+    <h2>Professional Experience</h2>
+    {experience.map((job) => (
+      <div class="job">
+        <h3>{job.role}</h3>
+        <p class="crumbs">{job.org} · {job.where} · {job.dates}</p>
+        <ul>{job.bullets.map((b) => <li>{b}</li>)}</ul>
+      </div>
+    ))}
+  </section>
+
+  <section>
+    <h2>Education &amp; Certifications</h2>
+    <ul class="certs">
+      {certifications.map((c) => <li><span>{c.name}</span><time>{c.date}</time></li>)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  section { margin-top: 2rem; }
+  h2 { font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: 0.3rem; }
+  h3 { margin: 1.4rem 0 0; font-size: 1.05rem; }
+  .job .crumbs { margin: 0.1rem 0 0.4rem; }
+  .job ul { margin-top: 0.3rem; }
+  .job li { margin-bottom: 0.35rem; }
+  .skills { margin: 0; }
+  .skills dt { font-weight: 600; margin-top: 0.6rem; }
+  .skills dd { margin: 0; color: var(--muted); }
+  .certs { list-style: none; padding: 0; }
+  .certs li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.4rem 0; border-bottom: 1px solid var(--line); }
+  .certs time { color: var(--muted); white-space: nowrap; }
+</style>

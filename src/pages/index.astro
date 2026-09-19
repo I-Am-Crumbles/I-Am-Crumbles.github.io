@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { sections } from '../data/sections';
+import { url } from '../data/url';
+
+// Same six destinations as the banner, in the same order.
+const explore = [
+  ...sections.map((s) => ({ href: url(`/${s.slug}/`), title: s.title, blurb: s.blurb })),
+  { href: url('/about/'), title: 'About', blurb: 'Who I am and what this site is.' },
+  { href: url('/resume/'), title: 'Resume', blurb: 'Experience, skills and certifications.' },
+];
+
+const recent = (await getCollection('writeups'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+---
+<Base>
+  <section class="hero">
+    <h1>Breaking things to understand them.</h1>
+    <p class="lede">Projects, writeups, experiments, and things I found interesting enough to take apart.</p>
+  </section>
+
+  <h2>Explore</h2>
+  <ul class="cards">
+    {explore.map((e) => (
+      <li class="card">
+        <a href={e.href}>{e.title}</a>
+        <p>{e.blurb}</p>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Recent writeups</h2>
+  <ul class="post-list">
+    {recent.map((p) => (
+      <li>
+        <time datetime={p.data.date.toISOString()}>{p.data.date.toISOString().slice(0, 10)}</time>
+        <a href={url(`/${p.id}/`)}>{p.data.title}</a>
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  .hero { padding: 1.5rem 0 0.5rem; }
+  .hero h1 { font-size: clamp(1.6rem, 4.5vw, 2.1rem); margin: 0 0 0.5rem; }
+  .lede { font-size: 1.05rem; color: var(--muted); max-width: 40rem; margin: 0; text-wrap: balance; }
+  h2 { margin-top: 2.5rem; }
+</style>

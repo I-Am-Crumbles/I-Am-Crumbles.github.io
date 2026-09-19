@@ -1,0 +1,109 @@
+---
+import { sections } from '../data/sections';
+import { url } from '../data/url';
+interface Props { title?: string }
+const { title } = Astro.props;
+const pageTitle = title ? `${title} · Crumbles` : 'Crumbles · Security & Photography Portfolio';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={url('/favicon.svg')} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <header class="site">
+      <a class="brand" href={url('/')}>Home</a>
+      <nav>
+        {sections.map((s) => <a href={url(`/${s.slug}/`)}>{s.title}</a>)}
+        <a href={url('/about/')}>About</a>
+        <a href={url('/resume/')}>Resume</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer class="site">© {new Date().getFullYear()} Matthew Crum</footer>
+  </body>
+</html>
+
+<style is:global>
+  /* Dark is the default. Visitors whose system is set to light get the light "paper" variant. */
+  :root {
+    color-scheme: dark light;
+    --bg: #0d1117;
+    --surface: #131a23;
+    --fg: #d8dee9;
+    --muted: #8b96a6;
+    --line: #253041;
+    --dot: #1a2331;
+    --blue: #5b9dff;
+    --amber: #d9a441;
+    --code: #111823;
+    --mono: ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f6f3ec;
+      --surface: #fbf9f4;
+      --fg: #1d2330;
+      --muted: #5d6675;
+      --line: #d9d2c2;
+      --dot: #e6e0d2;
+      --blue: #1f5fd6;
+      --amber: #8f5f06;
+      --code: #eee9dc;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size: 22px 22px;
+    color: var(--fg);
+    font: 17px/1.65 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  ::selection { background: var(--amber); color: var(--bg); }
+  a { color: var(--blue); text-underline-offset: 3px; }
+  a:hover { color: var(--amber); }
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+  header.site, footer.site {
+    max-width: 60rem; margin: 0 auto; padding: 1.25rem;
+    display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: baseline; justify-content: space-between;
+    font-family: var(--mono);
+  }
+  header.site { border-bottom: 1px dashed var(--line); font-size: 0.9rem; }
+  footer.site { color: var(--muted); font-size: 0.8rem; border-top: 1px dashed var(--line); margin-top: 3rem; }
+  .brand { font-weight: 700; color: var(--amber); text-decoration: none; }
+  .brand:hover { color: var(--blue); }
+  header.site nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+  header.site nav a { color: var(--blue); text-decoration: none; }
+  header.site nav a:hover { color: var(--amber); }
+
+  main { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem; }
+  h1 { line-height: 1.2; margin-top: 0; letter-spacing: -0.01em; }
+  h2::before { content: '//'; font-family: var(--mono); color: var(--amber); margin-right: 0.5em; font-weight: 400; }
+
+  .cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); padding: 0; list-style: none; }
+  .card { background: var(--surface); border: 1px dashed var(--line); border-radius: 6px; padding: 1rem 1.1rem; transition: border-color 0.15s; }
+  .card:hover { border-color: var(--amber); }
+  .card a { text-decoration: none; font-weight: 600; font-size: 1.05rem; }
+  .card p { margin: 0.3rem 0 0; color: var(--muted); font-size: 0.95rem; }
+  .soon { opacity: 0.6; }
+
+  .crumbs { color: var(--muted); font-size: 0.85rem; font-family: var(--mono); margin-bottom: 1rem; }
+  .post-list { list-style: none; padding: 0; }
+  .post-list li { display: flex; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px dashed var(--line); }
+  .post-list time { color: var(--amber); font-family: var(--mono); font-size: 0.85rem; min-width: 6.5rem; padding-top: 0.15rem; }
+
+  article img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 4px; }
+  article pre { overflow-x: auto; padding: 0.9rem; background: var(--code); border: 1px solid var(--line); border-radius: 6px; font-size: 0.9rem; }
+  article code { font-family: var(--mono); background: var(--code); padding: 0.1em 0.3em; border-radius: 4px; font-size: 0.9em; }
+  article pre code { background: none; padding: 0; }
+  article table { display: block; overflow-x: auto; border-collapse: collapse; }
+  article th, article td { border: 1px solid var(--line); padding: 0.35rem 0.6rem; }
+  article blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid var(--amber); color: var(--muted); }
+</style>

@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { sections } from '../../data/sections';
+import { url } from '../../data/url';
+
+export function getStaticPaths() {
+  return sections.map((section) => ({ params: { area: section.slug }, props: { section } }));
+}
+const { section } = Astro.props;
+const all = await getCollection('writeups');
+const count = (sub: string) => all.filter((e) => e.id.startsWith(`${section.slug}/${sub}/`)).length;
+---
+<Base title={section.title}>
+  <h1>{section.title}</h1>
+  <p>{section.blurb}</p>
+  {section.subs.length === 0 ? (
+    <p class="soon"><em>Coming soon.</em></p>
+  ) : (
+    <ul class="cards">
+      {section.subs.map((sub) => {
+        const n = count(sub.slug);
+        return (
+          <li class:list={['card', { soon: n === 0 }]}>
+            {n > 0 ? <a href={url(`/${section.slug}/${sub.slug}/`)}>{sub.title}</a> : <strong>{sub.title}</strong>}
+            <p>{sub.blurb} {n > 0 ? `(${n} posts)` : '(coming soon)'}</p>
+          </li>
+        );
+      })}
+    </ul>
+  )}
+</Base>

@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { sections } from '../../../data/sections';
+import { url } from '../../../data/url';
+
+export function getStaticPaths() {
+  return sections.flatMap((section) =>
+    section.subs.map((sub) => ({ params: { area: section.slug, sub: sub.slug }, props: { section, sub } })),
+  );
+}
+const { section, sub } = Astro.props;
+const posts = (await getCollection('writeups'))
+  .filter((e) => e.id.startsWith(`${section.slug}/${sub.slug}/`))
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+---
+<Base title={sub.title}>
+  <p class="crumbs"><a href={url('/')}>Home</a> / <a href={url(`/${section.slug}/`)}>{section.title}</a></p>
+  <h1>{sub.title}</h1>
+  <p>{sub.blurb}</p>
+  {posts.length === 0 ? <p class="soon"><em>Coming soon.</em></p> : (
+    <ul class="post-list">
+      {posts.map((p) => (
+        <li>
+          <time datetime={p.data.date.toISOString()}>{p.data.date.toISOString().slice(0, 10)}</time>
+          <a href={url(`/${p.id}/`)}>{p.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>

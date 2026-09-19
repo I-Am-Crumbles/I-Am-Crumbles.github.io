@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/resume';
+import { url } from '../data/url';
+---
+<Base title="About">
+  <h1>About</h1>
+  <p>
+    I'm Crumbles online and Matt in real life. I'm a {profile.title.toLowerCase()} focused on application security:
+    validating and triaging vulnerabilities across web, API and mobile targets, and helping people understand
+    what a finding actually means and how to fix it.
+  </p>
+  <p>
+    This site is my portfolio and lab notebook. It holds my{' '}
+    <a href={url('/web-app-security/')}>web app security writeups</a>, and it's growing to include hardware
+    hacking projects and photography.
+  </p>
+  <p>
+    You can see my background on the <a href={url('/resume/')}>resume page</a>, or reach me through{' '}
+    <a href={profile.linkedin}>LinkedIn</a>, <a href={profile.github}>GitHub</a> or <a href={`mailto:${profile.email}`}>email</a>.
+  </p>
+  <p class="crumbs">Everyone has a blog, bud. This one is mine.</p>
+</Base>
