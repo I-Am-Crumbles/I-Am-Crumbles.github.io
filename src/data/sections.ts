@@ -7,12 +7,13 @@ export const sections: Section[] = [
     title: 'Web App Security',
     blurb: 'Labs, writeups and notes on finding and exploiting web vulnerabilities.',
     subs: [
+      { slug: 'like-its-lunch', title: "Like It's Lunch", blurb: 'My own practice lab: real-world vulnerabilities rebuilt from scratch, then broken down into simple analogies about lunch.' },
       { slug: 'portswigger', title: 'PortSwigger', blurb: 'Web Security Academy labs: SQLi, auth, SSRF, XXE, XSS and more.' },
       { slug: 'htb', title: 'HackTheBox', blurb: 'Vulnerable box writeups.' },
       { slug: 'owasp-webgoat', title: 'OWASP / WebGoat', blurb: 'OWASP Top 10 walkthroughs.' },
     ],
   },
-  { slug: 'hardware-hacking', title: 'Hardware Hacking', blurb: 'Teardowns, UART/JTAG, firmware, and the projects behind them.', subs: [] },
+  { slug: 'hardware-hacking', title: 'Hardware Hacking', blurb: 'Building my own hardware hacking tools from scratch to learn the fundamentals.', subs: [] },
   { slug: 'homelab', title: 'Homelab', blurb: 'Home lab builds and tooling.', subs: [] },
-  { slug: 'photography', title: 'Photography', blurb: 'Galleries and portfolios.', subs: [] },
+  // { slug: 'photography', title: 'Photography', blurb: 'Galleries and portfolios.', subs: [] },  // temporarily hidden 2026-10-09
 ];

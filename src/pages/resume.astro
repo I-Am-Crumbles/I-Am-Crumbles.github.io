@@ -1,11 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import { profile, skillGroups, experience, certifications } from '../data/resume';
+import { profile, skillGroups, experience, certifications, projects } from '../data/resume';
 ---
 <Base title="Resume">
   <h1>Resume</h1>
   <p class="crumbs">
-    {profile.name} · {profile.title} · {profile.location} ·{' '}
+    {profile.name} · {profile.headline} · {profile.location} ·{' '}
     <a href={`mailto:${profile.email}`}>Email</a> · <a href={profile.linkedin}>LinkedIn</a> · <a href={profile.github}>GitHub</a>
   </p>
 
@@ -38,6 +38,13 @@ import { profile, skillGroups, experience, certifications } from '../data/resume
       {certifications.map((c) => <li><span>{c.name}</span><time>{c.date}</time></li>)}
     </ul>
   </section>
+
+  <section>
+    <h2>Projects</h2>
+    <ul class="projects">
+      {projects.map((p) => <li><strong>{p.name}</strong>: {p.desc}</li>)}
+    </ul>
+  </section>
 </Base>
 
 <style>
@@ -53,4 +60,6 @@ import { profile, skillGroups, experience, certifications } from '../data/resume
   .certs { list-style: none; padding: 0; }
   .certs li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.4rem 0; border-bottom: 1px solid var(--line); }
   .certs time { color: var(--muted); white-space: nowrap; }
+  .projects { padding-left: 1.1rem; margin: 0.3rem 0 0; }
+  .projects li { margin-bottom: 0.4rem; }
 </style>
