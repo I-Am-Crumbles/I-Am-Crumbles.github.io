@@ -161,11 +161,15 @@ DIY USB-C PD power meter.
 
 ## Future infrastructure
 
-Bambu Lab 3D printer (A1 or A1 Mini) — planned purchase, ~1-2 months out from this handoff. Not
-tied to any single wishlist gap; a general capability upgrade for future DIY builds. Plan is to
-use Claude Code + OpenSCAD or CadQuery for parametric, code-based CAD rather than a GUI tool.
+Bambu Lab 3D printer — **decided 2026-10-11: A1 Combo** (full-size A1, 256mm cube, + AMS Lite
+4-spool color feeder). Not purchased yet. Not tied to any single wishlist gap; a general
+capability upgrade for future DIY builds. Plan is to use Claude Code + OpenSCAD or CadQuery for
+parametric, code-based CAD rather than a GUI tool.
 
-Likely order of use once acquired:
+The Claude Code on the hardware-lab PC (next to the printer) will run the printer side. See
+"3D printer handoff" below for the full plan.
+
+Likely order of use once acquired (electronics):
 1. Pogo-pin test jig (DIY list, step 7)
 2. PCB vise (printed jaws/body, or printed inserts for a purchased vise)
 3. Custom probe/fixture holders (e.g. mount for the Pomona 5250 SOIC8 clip once purchased)
@@ -174,6 +178,70 @@ Likely order of use once acquired:
 
 Not useful for anything needing conductivity, RF shielding, or heat resistance near the
 hot-air station — plastic only.
+
+## 3D printer handoff (from main-PC Claude, 2026-10-11)
+
+### Why the A1 Combo
+- Full A1 over the Mini: scope grew past electronics (below); 256mm gives room for pedalboard
+  parts, bigger handheld shells, batch prints.
+- Combo: Matt wants multi-color for art/figures. Not needed for the stamps (ink makes the color).
+- Enclosed printers (P2S etc.) not needed: PETG covers pedals/handhelds/jigs; no ABS/ASA planned.
+- Starter add-ons: 0.2mm nozzle (stamp/face detail), PLA (several colors), PETG, TPU (ink stamp
+  faces), brass heat-set inserts (install with the soldering iron), small neodymium magnets, M3
+  screws, digital calipers (already on wishlist).
+- Possible later 2nd printer: a resin printer, only if Warhammer-scale minis or finer wax seals
+  become a real hobby. FDM minis are passable, resin is far better. Resin needs gloves, IPA, and
+  real ventilation (the solder fume extractor is not enough).
+
+### Workflow (Claude → printer)
+1. Claude writes an OpenSCAD script, key dimensions as parameters at the top (wall, hole sizes,
+   fit clearance). Matt supplies real measurements (calipers, part datasheets).
+2. Claude runs OpenSCAD CLI to render preview PNGs from several angles and checks them, then
+   exports STL/3MF into a projects folder.
+3. Matt opens it in Bambu Studio, slices, checks the preview, and presses Print himself (Wi-Fi,
+   or microSD as backup). Keep the Print button Matt's: the slice preview is where floating
+   parts / missing supports / wrong scale get caught.
+4. Print, measure, tweak a parameter, reprint. Expect 1-3 rounds on anything press-fit.
+- Use Claude for CAD, not the local LLM box (weaker at geometry, can't check renders).
+- Bambu cloud vs LAN-only mode: check current firmware options at setup; Bambu has changed
+  third-party access before. Bambu Studio itself works either way.
+- Setup when the printer arrives: install OpenSCAD (winget), make a projects folder, do one small
+  test print end to end before anything else.
+
+### Project ideas (beyond the electronics list above)
+
+**1. Solaire sun stamp set (first fun project).** Based on Solaire's sun insignia from Dark Souls
+(yellow sun, red parts, black face). Matt wants both ink and wax.
+- **Ink = layered stamp set.** The printer does NOT make the colors; ink does. Separate stamps,
+  each inked and pressed onto the same spot in turn:
+  - yellow layer stamp, red layer stamp, black face stamp (last).
+  - Stamp light to dark: yellow, then red, then black (dark covers light; yellow over red goes muddy).
+  - All share the same square base + a printed corner registration guide (paper in the corner,
+    each block butts into the same corner), like a MISTI-style stamp positioner.
+  - Trapping: yellow extends slightly under the red/black lines so small misalignment leaves no
+    white gap.
+  - Hard plastic inks unevenly: print the relief in TPU, or a thin relief glued on a foam-backed block.
+- **Swappable expressions.** The black face stamp has a twist-lock (or magnet) center puck; each
+  puck is one expression. Solaire's face is simple lines, so expressions can be parametric in
+  OpenSCAD (eye shape, brow angle, mouth curve). Hand-drawn SVGs can be imported too. Puck seam
+  sits on the face's circle outline so it hides in the impression.
+- **Wax = single stamp** (rays + face in one press, still with swappable face pucks), PLA/PETG,
+  chill between presses. Typical seal size ~25-30mm; 0.2mm nozzle; keep face lines bold.
+- ALWAYS mirror the stamping relief or impressions come out backwards.
+- Still open with Matt: size, handle style (stick handle vs palm-sized block), starter list of
+  3-5 expressions. Fan-art note: fine for personal use; selling = fan-art gray area.
+
+**2. Guitar pedals.** Most builders use aluminum Hammond boxes (1590B/125B) for shielding and
+stomp strength. Printer is best for drill templates, knobs, footswitch toppers, back plates,
+pedalboard brackets. Printed enclosures are possible: PETG, thick walls, solid infill around the
+footswitch, copper tape shielding (grounded), heat-set inserts. Open: kits vs own circuits.
+
+**3. Handheld gaming case.** Two-piece clamshell printed flat, tight button tolerances,
+multi-color buttons via AMS Lite. RP2040 + small screen is a natural tie-in with the hardware
+track. Open: RP2040 homebrew vs Raspberry Pi emulation vs reshelling an existing handheld.
+
+**4. Art / figures.** Multi-color display pieces, keychains, signs, busts via the Combo.
+Warhammer-scale minis: OK for gaming/paint practice, resin for real quality.
 
 ## Open items
 
